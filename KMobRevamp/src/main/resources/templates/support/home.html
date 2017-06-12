@@ -40,13 +40,18 @@
  				</div>
  				<div class="panel-body">
  					 
- 					 <form autocomplete="off" action="#" th:action="@{/service/registration}" th:object="${complaint}" method="post" class="form-horizontal" role="form">
+ 					 <form autocomplete="off" action="#" th:action="@{/support/home}" th:object="${complaint}" method="post" class="form-horizontal" role="form">
 					       <div class="container font">
 					         <div class="row">
 					            <div class="col-xs-4">
 					            <img th:src="@{/images/Forstar.PNG}"/>
 					            </div>
-					            <div class="col-xs-4"></div>
+					            <div class="col-xs-3">
+					            <input type="text" th:field="*{sno}" placeholder="Serial No"
+								           class="form-control" /> 
+						            <label th:if="${#fields.hasErrors('sno')}" th:errors="*{sno}"
+								           class="validation-message"></label>
+					            </div>
 					            <div class="col-xs-4">
 					            <table border="1">
 					            <tr>
@@ -110,76 +115,280 @@
 					         <br/>
 					         <div class="row">
 					            <div class="col-xs-3">
-					            <table frame="box">
-					            <tr><td><input type="text" th:field="*{model}" placeholder="Model............"
+					            <input type="text" th:field="*{model}" placeholder="Model............"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('model')}" th:errors="*{model}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{slno}" placeholder="Serial No............"
+								<input type="text" th:field="*{slno}" placeholder="Serial No............"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('slno')}" th:errors="*{slno}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{imeiorrsnno}" placeholder="IMEI/RSN No............"
+								<input type="text" th:field="*{imeiorrsnno}" placeholder="IMEI/RSN No............"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('imeiorrsnno')}" th:errors="*{imeiorrsnno}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{batteryno}" placeholder="Battery No............"
+								<input type="text" th:field="*{batteryno}" placeholder="Battery No............"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('batteryno')}" th:errors="*{batteryno}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{dateofpurchase}" placeholder="Date of Purchase............"
+								<input type="text" th:field="*{dateofpurchase}" placeholder="Date of Purchase............"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('dateofpurchase')}" th:errors="*{dateofpurchase}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:name="*{status}" th:value="AMC" 
+								<input type="text" th:name="*{status}" th:value="AMC" 
 								           class="form-control" readonly/> 
 						              <label th:if="${#fields.hasErrors('status')}" th:errors="*{status}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-					            </table>
 					            </div>
+					            <div class="col-xs-1"></div>
 					            <div class="col-xs-3">
-					            <table >
-					            <tr><td><input type="text" th:field="*{cname}" placeholder="Customer Name"
+					            <input type="text" th:field="*{cname}" placeholder="Customer Name"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('cname')}" th:errors="*{cname}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><textarea th:field="*{caddress}" placeholder="Customer Address" class="form-control" >
+								<textarea th:field="*{caddress}" placeholder="Customer Address" class="form-control" >
 								         </textarea> 
 						              <label th:if="${#fields.hasErrors('caddress')}" th:errors="*{caddress}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{cmobile}" placeholder="Mobile No"
+								
+								<input type="text" th:field="*{cmobile}" placeholder="Mobile No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('cmobile')}" th:errors="*{cmobile}"
 								           class="validation-message"></label>
-								    </td>       
-								</tr>
-								<tr><td><input type="text" th:field="*{clandline}" placeholder="Landline No"
+								<input type="text" th:field="*{clandline}" placeholder="Landline No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('clandline')}" th:errors="*{clandline}"
 								           class="validation-message"></label>
-								    </td>       
+								</div>
+								<div class="col-xs-1"></div>
+								<div class="col-xs-3">
+								<table border=1>
+								<tr><td colspan=2 style="padding:5px">FORSTAR TECHNO SOLUTIONS PRIVATE LIMITED</td></tr>
+								<tr><td colspan=2 style="padding:5px">IT Park, Ganga Malanpur, Morena link Road</td></tr>
+								<tr><td colspan=2 style="padding:5px">Gwalior M.P. 474003</td></tr>
+								<tr><td colspan=2 style="padding:5px">Customer care no : 0751 715 0001</td></tr>
+								<tr>
+								    <td style="padding:5px">support@forstarindia.com</td>
+								    <td style="padding:5px">www.forstarindia.com</td>
 								</tr>
 								</table>
-					            </div>
+								</div>
 					         </div>
-					       
-					       </div>
+					         <br/>
+					         <div class="row">
+					         <div class="col-xs-10">
+					         <label>Nature of Complaint As reported By Customer : ( To be Customer).</label>
+					         </div>
+					         </div>
+					         <div class="row">
+					         <div class="col-xs-11">
+					         <textarea th:field="*{natureofcomplaint}" placeholder="" class="form-control" >
+								         </textarea> 
+						              <label th:if="${#fields.hasErrors('natureofcomplaint')}" th:errors="*{natureofcomplaint}"
+								           class="validation-message"></label>
+					         </div>
+					         </div>
+					         <br/>
+					         <div class="row">
+					         <div class="col-xs-10">
+					         <label>Condition of Equipment ( External Only )</label>
+					         </div>
+					         </div>
+					         <div class="row">
+					         <div class="col-xs-2">
+					         <div>Handset Damaged</div>
+					         <div>LCD Broken/Bleeding</div>
+					         <div>Adaptor burnt</div>
+					         </div>
+					         <div class="col-xs-1">
+					         <div><input type="checkbox" name="handsetdamaged"></input></div>
+					         <div><input type="checkbox" name="lcdbroken"></input></div>
+					         <div><input type="checkbox" name="adaptorburnt"></input></div>
+					         </div>
+					         <div class="col-xs-1"></div>
+					         <div class="col-xs-2">
+					         <div>Scratches on Aoshthetich/Body</div>
+					         <div>Keypad faded / Key Missings</div>
+					         <div>ACC Function</div>
+					         </div>
+					         <div class="col-xs-1">
+					         <div><input type="checkbox" name="scratchesonbody"></input></div>
+					         <div><input type="checkbox" name="keypadfaded"></input></div>
+					         <div><input type="checkbox" name="accfunction"></input></div>
+					         </div>
+					         <div class="col-xs-1"></div>
+					         <div class="col-xs-2">
+					         <div>Liquid Logged</div>
+					         <div>Battery Damaged</div>
+					         </div>
+					         <div class="col-xs-1">
+					         <div><input type="checkbox" name="liquidlogged"></input></div>
+					         <div><input type="checkbox" name="batterydamaged"></input></div>
+					         </div>
+					         </div>
+					         <br/>
+					         <div class="row">
+					         <div class="col-xs-3">
+					         <label>Received Item:</label>
+					         </div>
+					         <div class="col-xs-8">
+					         <label>Fault Found By Engineer:</label>
+					         </div>
+					         </div>
+					         <div class="row">
+					         <div class="col-xs-2">
+					         <div style="margin-top:3px;margin-bottom:3px">Hand set</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Battery</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Charger</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Hands free</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Sound Mate</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Memory card</div>
+					         <div style="margin-top:3px;margin-bottom:3px">Data Cable</div>
+					         </div>
+					         <div class="col-xs-1">
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="handset"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="battery"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="charger"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="handsfree"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="soundmate"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="memorycard"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="datacable"></input></div>
+					         </div>
+					         <div class="col-xs-8">
+					         <textarea th:field="*{fault}" placeholder="" class="form-control" >
+								         </textarea> 
+						              <label th:if="${#fields.hasErrors('fault')}" th:errors="*{fault}"
+								           class="validation-message"></label>
+							 <div class="row">
+							 <div class="col-xs-4">
+							 <table border=1 style="width:200px">
+							 <tr>
+							 <td colspan=2 style="padding:3px" align="center">Estimate Details</td>
+							 </tr>
+							 <tr>
+							 <td style="padding:3px" align="center">Type</td>
+							 <td style="padding:3px" align="center">Amount</td>
+							 </tr>
+							 <tr>
+							 <td style="padding:3px" align="center">Labour</td>
+							 <td style="padding:3px" align="center">
+							 <input type="text" th:field="*{labour}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('labour')}" th:errors="*{labour}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 <tr>
+							 <td style="padding:3px" align="center">Part</td>
+							 <td style="padding:3px" align="center">
+							 <input type="text" th:field="*{part}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('part')}" th:errors="*{part}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 <tr>
+							 <td style="padding:3px" align="center">Approved</td>
+							 <td style="padding:3px" align="center">
+							 <input type="checkbox" name="approved">
+						     </td>
+							 </tr>
+							 </table>
+							 </div>	 
+							 <div class="col-xs-7">
+							 <table border=1 style="width:500px">
+							 <tr>
+							 <td colspan=2 style="padding:3px" align="left">Details of Stand by model issued:</td>
+							 </tr>
+							 <tr>
+							 <td style="padding:2px" align="center">Stand By Model</td>
+							 <td style="padding:2px" align="center">
+							 <input type="text" th:field="*{standbymodel}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('standbymodel')}" th:errors="*{standbymodel}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 <tr>
+							 <td style="padding:2px" align="center">Serial No</td>
+							 <td style="padding:2px" align="center">
+							 <input type="text" th:field="*{serialno}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('serialno')}" th:errors="*{serialno}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 <tr>
+							 <td style="padding:2px" align="center">Ref./IMEI</td>
+							 <td style="padding:2px" align="center">
+							 <input type="text" th:field="*{reforimei}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('reforimei')}" th:errors="*{reforimei}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 <tr>
+							 <td style="padding:2px" align="center">Date</td>
+							 <td style="padding:2px" align="center">
+							 <input type="text" th:field="*{standbydate}" placeholder=""
+								           class="form-control" /> 
+						              <label th:if="${#fields.hasErrors('standbydate')}" th:errors="*{standbydate}"
+								           class="validation-message"></label>
+						     </td>
+							 </tr>
+							 </table>
+							 </div>
+							 </div>          
+					         </div>
+					         </div>
+					         <div class="row">
+					         <br/>
+					         <div class="col-xs-11">
+					         <label>I have gone through the terms and Conditions mentioned, herein and overleaf and agree to abide by the same</label>
+					         </div>
+					         </div>
+					         <div class="row">
+					         <br/>
+					         <div class="col-xs-7">
+					         <div style="margin-top:3px;margin-bottom:3px">I have received the equipment in satisfactory working conditions</div>
+					         <div style="margin-top:3px;margin-bottom:3px">I here by reject the estimate given & take back the handset as per my wish</div>
+					         </div>
+					         <div class="col-xs-1">
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" name="receivedequipmentorrejectestimate" value="received_equipment" checked></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" name="receivedequipmentorrejectestimate" value="reject_estimate"></input></div>
+					         </div>
+					         </div>
+					         <br/>
+					         <br/>
+					         <div class="row">
+					         <div class="col-xs-2">
+					         Signature of the Customer
+					         </div>
+					         <div class="col-xs-1"><input type="checkbox" name="sig_customer1"></input></div>
+					         <div class="col-xs-1"></div>
+					         <div class="col-xs-2">
+					         Received(ASC Personnel)
+					         </div>
+					         <div class="col-xs-1"><input type="checkbox" name="sig_asc_personnel"></input></div>
+					         <div class="col-xs-1"></div>
+					         <div class="col-xs-2">
+					         Signature of the Customer
+					         </div>
+					         <div class="col-xs-1"><input type="checkbox" name="sig_customer2"></input></div>
+					         <div class="col-xs-1"></div>
+					         </div>
+					         <br/>
+					         <br/>
+					         <div class="row">
+					         <div class="col-xs-4"></div>
+					         <div class="col-xs-3">
+					         <button class="btn btn-md btn-danger btn-block" name="Submit" value="Submit" type="Submit" th:text="Login"></button>
+					         </div>
+					         <div class="col-xs-4"></div>
+					         </div>
+					         <br/>
+					         <br/>
+							 </div>
  					 </form>
  					 
  				</div>
