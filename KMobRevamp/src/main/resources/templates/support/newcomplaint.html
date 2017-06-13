@@ -23,9 +23,10 @@
  				  <div class="row" style="color:white">  
  				    <div class="col-xs-3">
                         <ul class="nav navbar-nav navbar-left">
-                            <li class="active"><a th:href="@{/support/home}" class="" style="color:white">Home</a>
+                            <li class="active"><a th:href="@{/support/home}" class="" style="color:white">New Complaint</a>
                             </li>
-                            
+                            <li><a th:href="@{/support/searchcomplaint}" class="" style="color:white">Search Complaint</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-xs-5">
@@ -42,6 +43,13 @@
  					 
  					 <form autocomplete="off" action="#" th:action="@{/support/home}" th:object="${complaint}" method="post" class="form-horizontal" role="form">
 					       <div class="container font">
+					         <div th:if="${saved}" class="row">
+					            <span class="col-xs-11 label label-success" style="font-size:20px">Complaint Saved Successfully</span>
+					            
+					         </div>
+					         <div th:if="${saved}" class="row">
+					         <br/>
+					         </div>
 					         <div class="row">
 					            <div class="col-xs-4">
 					            <img th:src="@{/images/Forstar.PNG}"/>
@@ -84,28 +92,28 @@
 					         <br/>
 					         <div class="row">
 					               <div class="col-xs-2">
-					                  <input type="text" th:field="*{workorderno}" placeholder="Work Order No........"
+					                  <input type="text" th:field="*{workorderno}" placeholder="Work Order No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('workorderno')}" th:errors="*{workorderno}"
 								           class="validation-message"></label>
 								   </div>
 								   <div class="col-xs-1"></div>
 								   <div class="col-xs-2">
-					                  <input type="text" th:field="*{date}" placeholder="Date[DD-MM-YYYY]...."
+					                  <input type="text" th:field="*{date}" placeholder="Date[DD-MM-YYYY]"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('date')}" th:errors="*{date}"
 								           class="validation-message"></label>
 								   </div>
 								   <div class="col-xs-1"></div>
 								   <div class="col-xs-2">
-					                  <input type="text" th:field="*{tokenno}" placeholder="Token No............"
+					                  <input type="text" th:field="*{tokenno}" placeholder="Token No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('tokenno')}" th:errors="*{tokenno}"
 								           class="validation-message"></label>
 								   </div>
 								   <div class="col-xs-1"></div>
 								   <div class="col-xs-2">
-					                  <input type="text" th:field="*{claimno}" placeholder="Claim No............"
+					                  <input type="text" th:field="*{claimno}" placeholder="Claim No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('claimno')}" th:errors="*{claimno}"
 								           class="validation-message"></label>
@@ -115,30 +123,28 @@
 					         <br/>
 					         <div class="row">
 					            <div class="col-xs-3">
-					            <input type="text" th:field="*{model}" placeholder="Model............"
+					            <input type="text" th:field="*{model}" placeholder="Model"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('model')}" th:errors="*{model}"
 								           class="validation-message"></label>
-								<input type="text" th:field="*{slno}" placeholder="Serial No............"
+								<input type="text" th:field="*{slno}" placeholder="Serial No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('slno')}" th:errors="*{slno}"
 								           class="validation-message"></label>
-								<input type="text" th:field="*{imeiorrsnno}" placeholder="IMEI/RSN No............"
+								<input type="text" th:field="*{imeiorrsnno}" placeholder="IMEI/RSN No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('imeiorrsnno')}" th:errors="*{imeiorrsnno}"
 								           class="validation-message"></label>
-								<input type="text" th:field="*{batteryno}" placeholder="Battery No............"
+								<input type="text" th:field="*{batteryno}" placeholder="Battery No"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('batteryno')}" th:errors="*{batteryno}"
 								           class="validation-message"></label>
-								<input type="text" th:field="*{dateofpurchase}" placeholder="Date of Purchase............"
+								<input type="text" th:field="*{dateofpurchase}" placeholder="Date of Purchase[DD-MM-YYYY]"
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('dateofpurchase')}" th:errors="*{dateofpurchase}"
 								           class="validation-message"></label>
-								<input type="text" th:name="*{status}" th:value="AMC" 
-								           class="form-control" readonly/> 
-						              <label th:if="${#fields.hasErrors('status')}" th:errors="*{status}"
-								           class="validation-message"></label>
+								      <input type="text" th:value="${st}" class="form-control" readonly/> 
+						              <input type="hidden" name="status" th:value="${st}"/>
 					            </div>
 					            <div class="col-xs-1"></div>
 					            <div class="col-xs-3">
@@ -201,9 +207,9 @@
 					         <div>Adaptor burnt</div>
 					         </div>
 					         <div class="col-xs-1">
-					         <div><input type="checkbox" name="handsetdamaged"></input></div>
-					         <div><input type="checkbox" name="lcdbroken"></input></div>
-					         <div><input type="checkbox" name="adaptorburnt"></input></div>
+					         <div><input type="checkbox" th:field="*{handsetdamaged}"></input></div>
+					         <div><input type="checkbox" th:field="*{lcdbroken}"></input></div>
+					         <div><input type="checkbox" th:field="*{adaptorburnt}"></input></div>
 					         </div>
 					         <div class="col-xs-1"></div>
 					         <div class="col-xs-2">
@@ -212,9 +218,9 @@
 					         <div>ACC Function</div>
 					         </div>
 					         <div class="col-xs-1">
-					         <div><input type="checkbox" name="scratchesonbody"></input></div>
-					         <div><input type="checkbox" name="keypadfaded"></input></div>
-					         <div><input type="checkbox" name="accfunction"></input></div>
+					         <div><input type="checkbox" th:field="*{scratchesonbody}"></input></div>
+					         <div><input type="checkbox" th:field="*{keypadfaded}"></input></div>
+					         <div><input type="checkbox" th:field="*{accfunction}"></input></div>
 					         </div>
 					         <div class="col-xs-1"></div>
 					         <div class="col-xs-2">
@@ -222,8 +228,8 @@
 					         <div>Battery Damaged</div>
 					         </div>
 					         <div class="col-xs-1">
-					         <div><input type="checkbox" name="liquidlogged"></input></div>
-					         <div><input type="checkbox" name="batterydamaged"></input></div>
+					         <div><input type="checkbox" th:field="*{liquidlogged}"></input></div>
+					         <div><input type="checkbox" th:field="*{batterydamaged}"></input></div>
 					         </div>
 					         </div>
 					         <br/>
@@ -246,13 +252,13 @@
 					         <div style="margin-top:3px;margin-bottom:3px">Data Cable</div>
 					         </div>
 					         <div class="col-xs-1">
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="handset"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="battery"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="charger"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="handsfree"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="soundmate"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="memorycard"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" name="datacable"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{handset}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{battery}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{charger}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{handsfree}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{soundmate}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{memorycard}"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="checkbox" th:field="*{datacable}"></input></div>
 					         </div>
 					         <div class="col-xs-8">
 					         <textarea th:field="*{fault}" placeholder="" class="form-control" >
@@ -281,16 +287,15 @@
 							 <tr>
 							 <td style="padding:3px" align="center">Part</td>
 							 <td style="padding:3px" align="center">
-							 <input type="text" th:field="*{part}" placeholder=""
-								           class="form-control" /> 
-						              <label th:if="${#fields.hasErrors('part')}" th:errors="*{part}"
-								           class="validation-message"></label>
+							    <select class="form-control" th:field="*{part}"  id="dropFactory">
+                                       <option th:each="prt : ${parts}" th:value="${prt.rate}" th:text="${prt.part}+'-'+${prt.rate}"></option>
+                                </select>
 						     </td>
 							 </tr>
 							 <tr>
 							 <td style="padding:3px" align="center">Approved</td>
 							 <td style="padding:3px" align="center">
-							 <input type="checkbox" name="approved">
+							 <input type="checkbox" th:field="*{approved}">
 						     </td>
 							 </tr>
 							 </table>
@@ -355,9 +360,9 @@
 					         <div style="margin-top:3px;margin-bottom:3px">I here by reject the estimate given & take back the handset as per my wish</div>
 					         </div>
 					         <div class="col-xs-1">
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" name="receivedequipmentorrejectestimate" value="will_update_later" checked></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" name="receivedequipmentorrejectestimate" value="received_equipment"></input></div>
-					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" name="receivedequipmentorrejectestimate" value="reject_estimate"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" th:field="*{receivedequipmentorrejectestimate}" value="willupdate" checked="checked"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" th:field="*{receivedequipmentorrejectestimate}" value="receivedequipment"></input></div>
+					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" th:field="*{receivedequipmentorrejectestimate}" value="rejectestimate"></input></div>
 					         </div>
 					         </div>
 					         <br/>
@@ -366,17 +371,17 @@
 					         <div class="col-xs-2">
 					         Signature of the Customer
 					         </div>
-					         <div class="col-xs-1"><input type="checkbox" name="sig_customer1"></input></div>
+					         <div class="col-xs-1"><input type="checkbox" th:field="*{sig_customer1}"></input></div>
 					         <div class="col-xs-1"></div>
 					         <div class="col-xs-2">
 					         Received(ASC Personnel)
 					         </div>
-					         <div class="col-xs-1"><input type="checkbox" name="sig_asc_personnel"></input></div>
+					         <div class="col-xs-1"><input type="checkbox" th:field="*{sig_asc_personnel}"></input></div>
 					         <div class="col-xs-1"></div>
 					         <div class="col-xs-2">
 					         Signature of the Customer
 					         </div>
-					         <div class="col-xs-1"><input type="checkbox" name="sig_customer2"></input></div>
+					         <div class="col-xs-1"><input type="checkbox" th:field="*{sig_customer2}"></input></div>
 					         <div class="col-xs-1"></div>
 					         </div>
 					         <br/>
@@ -384,7 +389,7 @@
 					         <div class="row">
 					         <div class="col-xs-4"></div>
 					         <div class="col-xs-3">
-					         <button class="btn btn-md btn-danger btn-block" name="Submit" value="Submit" type="Submit" th:text="Login"></button>
+					         <button class="btn btn-md btn-danger btn-block" name="Submit" value="Submit" type="Submit" th:text="Submit"></button>
 					         </div>
 					         <div class="col-xs-4"></div>
 					         </div>

@@ -18,6 +18,13 @@ public class ComplaintServiceImpl implements ComplaintService {
 		 complaintRepository.save(complaint);
 		
 	}
+
+	@Override
+	public Complaint findComplaintBySno(String sno) {
+		
+		return complaintRepository.findBySno(sno);
+	}
+
 	
 	
 	

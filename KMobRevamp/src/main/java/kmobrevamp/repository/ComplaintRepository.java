@@ -9,5 +9,5 @@ import kmobrevamp.model.Complaint;
 public interface ComplaintRepository extends JpaRepository<Complaint,String> {
 
 	
-		
+		Complaint findBySno(String sno);
 }

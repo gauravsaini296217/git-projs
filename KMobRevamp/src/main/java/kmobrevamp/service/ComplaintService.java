@@ -6,4 +6,5 @@ public interface ComplaintService {
 
 	public void saveComplaint(Complaint complaint);
 	
+	public Complaint findComplaintBySno(String sno);
 }

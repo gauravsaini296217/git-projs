@@ -101,50 +101,50 @@ public class Complaint {
 	@Column(name="natureofcomplaint",length=250,nullable=false)
 	private String natureofcomplaint;
 	
-	@Column(name="handsetdamaged",length=10,nullable=true)
-	private String handsetdamaged;
+	@Column(name="handsetdamaged",nullable=true)
+	private Boolean handsetdamaged;
 	
-	@Column(name="lcdbroken",length=10,nullable=true)
-	private String lcdbroken;
+	@Column(name="lcdbroken",nullable=true)
+	private Boolean lcdbroken;
 	
-	@Column(name="adaptorburnt",length=10,nullable=true)
-	private String adaptorburnt;
+	@Column(name="adaptorburnt",nullable=true)
+	private Boolean adaptorburnt;
 	
-	@Column(name="scratchesonbody",length=10,nullable=true)
-	private String scratchesonbody;
+	@Column(name="scratchesonbody",nullable=true)
+	private Boolean scratchesonbody;
 	
-	@Column(name="keypadfaded",length=10,nullable=true)
-	private String keypadfaded;
+	@Column(name="keypadfaded",nullable=true)
+	private Boolean keypadfaded;
 	
-	@Column(name="accfunction",length=10,nullable=true)
-	private String accfunction;
+	@Column(name="accfunction",nullable=true)
+	private Boolean accfunction;
 	
-	@Column(name="liquidlogged",length=10,nullable=true)
-	private String liquidlogged;
+	@Column(name="liquidlogged",nullable=true)
+	private Boolean liquidlogged;
 	
-	@Column(name="batterydamaged",length=10,nullable=true)
-	private String batterydamaged;
+	@Column(name="batterydamaged",nullable=true)
+	private Boolean batterydamaged;
 	
-	@Column(name="handset",length=10,nullable=true)
-	private String handset;
+	@Column(name="handset",nullable=true)
+	private Boolean handset;
 	
-	@Column(name="battery",length=10,nullable=true)
-	private String battery;
+	@Column(name="battery",nullable=true)
+	private Boolean battery;
 	
-	@Column(name="charger",length=10,nullable=true)
-	private String charger;
+	@Column(name="charger",nullable=true)
+	private Boolean charger;
 	
-	@Column(name="handsfree",length=10,nullable=true)
-	private String handsfree;
+	@Column(name="handsfree",nullable=true)
+	private Boolean handsfree;
 	
-	@Column(name="soundmate",length=10,nullable=true)
-	private String soundmate;
+	@Column(name="soundmate",nullable=true)
+	private Boolean soundmate;
 	
-	@Column(name="memorycard",length=10,nullable=true)
-	private String memorycard;
+	@Column(name="memorycard",nullable=true)
+	private Boolean memorycard;
 	
-	@Column(name="datacable",length=10,nullable=true)
-	private String datacable;
+	@Column(name="datacable",nullable=true)
+	private Boolean datacable;
 
 	@Column(name="fault",length=250,nullable=true)
 	private String fault;
@@ -155,8 +155,8 @@ public class Complaint {
 	@Column(name="part",nullable=true)
 	private float part;
 	
-	@Column(name="approved",length=10,nullable=true)
-	private String approved;
+	@Column(name="approved",nullable=true)
+	private Boolean approved;
 	
 	@Column(name="standbymodel",length=25,nullable=true)
 	private String standbymodel;
@@ -168,350 +168,521 @@ public class Complaint {
 	@Column(name="reforimei",length=25,nullable=true)
 	private String reforimei;
 	
-	@DateTimeFormat(pattern="dd-MM-YYYY")
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	@Column(name="standbydate",nullable=true)
 	private Date standbydate;
 
-	@Column(name="receivedequipmentorrejectestimate", length=25,nullable=true)
+	@Column(name="receivedequipmentorrejectestimate",length=25,nullable=true)
 	private String receivedequipmentorrejectestimate;
 	
 	@Column(name="sig_customer1", length=25,nullable=true)
-	private String sig_customer1;
+	private Boolean sig_customer1;
 	
 	@Column(name="sig_asc_personnel", length=25,nullable=true)
-	private String sig_asc_personnel;
+	private Boolean sig_asc_personnel;
 
 	@Column(name="sig_customer2", length=25,nullable=true)
-	private String sig_customer2;
+	private Boolean sig_customer2;
+	
+	@Column(name="registeruser", length=60,nullable=true)
+	private String registeruser;
+	
+	@Column(name="updateuser", length=60,nullable=true)
+	private String updateuser;
+	
+	@Column(name="createddate",nullable=true)
+	private Date createddate;
+	
+	@Column(name="updatedate",nullable=true)
+	private Date updatedate;
 	
 	
-	
+
 	public String getSno() {
 		return sno;
 	}
+
+
 
 	public void setSno(String sno) {
 		this.sno = sno;
 	}
 
+
+
 	public String getWorkorderno() {
 		return workorderno;
 	}
+
+
 
 	public void setWorkorderno(String workorderno) {
 		this.workorderno = workorderno;
 	}
 
-	
+
+
 	public Date getIndate() {
 		return indate;
 	}
+
+
 
 	public void setIndate(Date indate) {
 		this.indate = indate;
 	}
 
+
+
 	public Date getRegndate() {
 		return regndate;
 	}
+
+
 
 	public void setRegndate(Date regndate) {
 		this.regndate = regndate;
 	}
 
+
+
 	public Date getDate() {
 		return date;
 	}
+
+
 
 	public void setDate(Date date) {
 		this.date = date;
 	}
 
+
+
 	public Long getTokenno() {
 		return tokenno;
 	}
+
+
 
 	public void setTokenno(Long tokenno) {
 		this.tokenno = tokenno;
 	}
 
+
+
 	public Long getClaimno() {
 		return claimno;
 	}
+
+
 
 	public void setClaimno(Long claimno) {
 		this.claimno = claimno;
 	}
 
+
+
 	public String getModel() {
 		return model;
 	}
+
+
 
 	public void setModel(String model) {
 		this.model = model;
 	}
 
-	
+
+
 	public String getSlno() {
 		return slno;
 	}
+
+
 
 	public void setSlno(String slno) {
 		this.slno = slno;
 	}
 
+
+
 	public String getImeiorrsnno() {
 		return imeiorrsnno;
 	}
+
+
 
 	public void setImeiorrsnno(String imeiorrsnno) {
 		this.imeiorrsnno = imeiorrsnno;
 	}
 
+
+
 	public String getBatteryno() {
 		return batteryno;
 	}
+
+
 
 	public void setBatteryno(String batteryno) {
 		this.batteryno = batteryno;
 	}
 
+
+
 	public Date getDateofpurchase() {
 		return dateofpurchase;
 	}
+
+
 
 	public void setDateofpurchase(Date dateofpurchase) {
 		this.dateofpurchase = dateofpurchase;
 	}
 
+
+
 	public String getStatus() {
 		return status;
 	}
+
+
 
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
+
+
 	public String getCname() {
 		return cname;
 	}
+
+
 
 	public void setCname(String cname) {
 		this.cname = cname;
 	}
 
+
+
 	public String getCaddress() {
 		return caddress;
 	}
+
+
 
 	public void setCaddress(String caddress) {
 		this.caddress = caddress;
 	}
 
+
+
 	public String getCmobile() {
 		return cmobile;
 	}
+
+
 
 	public void setCmobile(String cmobile) {
 		this.cmobile = cmobile;
 	}
 
+
+
 	public String getClandline() {
 		return clandline;
 	}
+
+
 
 	public void setClandline(String clandline) {
 		this.clandline = clandline;
 	}
 
+
+
 	public String getNatureofcomplaint() {
 		return natureofcomplaint;
 	}
+
+
 
 	public void setNatureofcomplaint(String natureofcomplaint) {
 		this.natureofcomplaint = natureofcomplaint;
 	}
 
-	public String getHandsetdamaged() {
+
+
+	public Boolean getHandsetdamaged() {
 		return handsetdamaged;
 	}
 
-	public void setHandsetdamaged(String handsetdamaged) {
+
+
+	public void setHandsetdamaged(Boolean handsetdamaged) {
 		this.handsetdamaged = handsetdamaged;
 	}
 
-	public String getLcdbroken() {
+
+
+	public Boolean getLcdbroken() {
 		return lcdbroken;
 	}
 
-	public void setLcdbroken(String lcdbroken) {
+
+
+	public void setLcdbroken(Boolean lcdbroken) {
 		this.lcdbroken = lcdbroken;
 	}
 
-	public String getAdaptorburnt() {
+
+
+	public Boolean getAdaptorburnt() {
 		return adaptorburnt;
 	}
 
-	public void setAdaptorburnt(String adaptorburnt) {
+
+
+	public void setAdaptorburnt(Boolean adaptorburnt) {
 		this.adaptorburnt = adaptorburnt;
 	}
 
-	public String getScratchesonbody() {
+
+
+	public Boolean getScratchesonbody() {
 		return scratchesonbody;
 	}
 
-	public void setScratchesonbody(String scratchesonbody) {
+
+
+	public void setScratchesonbody(Boolean scratchesonbody) {
 		this.scratchesonbody = scratchesonbody;
 	}
 
-	public String getKeypadfaded() {
+
+
+	public Boolean getKeypadfaded() {
 		return keypadfaded;
 	}
 
-	public void setKeypadfaded(String keypadfaded) {
+
+
+	public void setKeypadfaded(Boolean keypadfaded) {
 		this.keypadfaded = keypadfaded;
 	}
 
-	public String getAccfunction() {
+
+
+	public Boolean getAccfunction() {
 		return accfunction;
 	}
 
-	public void setAccfunction(String accfunction) {
+
+
+	public void setAccfunction(Boolean accfunction) {
 		this.accfunction = accfunction;
 	}
 
-	public String getLiquidlogged() {
+
+
+	public Boolean getLiquidlogged() {
 		return liquidlogged;
 	}
 
-	public void setLiquidlogged(String liquidlogged) {
+
+
+	public void setLiquidlogged(Boolean liquidlogged) {
 		this.liquidlogged = liquidlogged;
 	}
 
-	public String getBatterydamaged() {
+
+
+	public Boolean getBatterydamaged() {
 		return batterydamaged;
 	}
 
-	public void setBatterydamaged(String batterydamaged) {
+
+
+	public void setBatterydamaged(Boolean batterydamaged) {
 		this.batterydamaged = batterydamaged;
 	}
 
-	public String getHandset() {
+
+
+	public Boolean getHandset() {
 		return handset;
 	}
 
-	public void setHandset(String handset) {
+
+
+	public void setHandset(Boolean handset) {
 		this.handset = handset;
 	}
 
-	public String getBattery() {
+
+
+	public Boolean getBattery() {
 		return battery;
 	}
 
-	public void setBattery(String battery) {
+
+
+	public void setBattery(Boolean battery) {
 		this.battery = battery;
 	}
 
-	public String getCharger() {
+
+
+	public Boolean getCharger() {
 		return charger;
 	}
 
-	public void setCharger(String charger) {
+
+
+	public void setCharger(Boolean charger) {
 		this.charger = charger;
 	}
 
-	public String getHandsfree() {
+
+
+	public Boolean getHandsfree() {
 		return handsfree;
 	}
 
-	public void setHandsfree(String handsfree) {
+
+
+	public void setHandsfree(Boolean handsfree) {
 		this.handsfree = handsfree;
 	}
 
-	public String getSoundmate() {
+
+
+	public Boolean getSoundmate() {
 		return soundmate;
 	}
 
-	public void setSoundmate(String soundmate) {
+
+
+	public void setSoundmate(Boolean soundmate) {
 		this.soundmate = soundmate;
 	}
 
-	public String getMemorycard() {
+
+
+	public Boolean getMemorycard() {
 		return memorycard;
 	}
 
-	public void setMemorycard(String memorycard) {
+
+
+	public void setMemorycard(Boolean memorycard) {
 		this.memorycard = memorycard;
 	}
 
-	public String getDatacable() {
+
+
+	public Boolean getDatacable() {
 		return datacable;
 	}
 
-	public void setDatacable(String datacable) {
+
+
+	public void setDatacable(Boolean datacable) {
 		this.datacable = datacable;
 	}
+
+
 
 	public String getFault() {
 		return fault;
 	}
 
+
+
 	public void setFault(String fault) {
 		this.fault = fault;
 	}
 
-	
+
+
 	public float getLabour() {
 		return labour;
 	}
+
+
 
 	public void setLabour(float labour) {
 		this.labour = labour;
 	}
 
+
+
 	public float getPart() {
 		return part;
 	}
+
+
 
 	public void setPart(float part) {
 		this.part = part;
 	}
 
-	public String getApproved() {
+
+
+	public Boolean getApproved() {
 		return approved;
 	}
 
-	public void setApproved(String approved) {
+
+
+	public void setApproved(Boolean approved) {
 		this.approved = approved;
 	}
+
+
 
 	public String getStandbymodel() {
 		return standbymodel;
 	}
 
+
+
 	public void setStandbymodel(String standbymodel) {
 		this.standbymodel = standbymodel;
 	}
+
+
 
 	public String getSerialno() {
 		return serialno;
 	}
 
+
+
 	public void setSerialno(String serialno) {
 		this.serialno = serialno;
 	}
+
+
 
 	public String getReforimei() {
 		return reforimei;
 	}
 
+
+
 	public void setReforimei(String reforimei) {
 		this.reforimei = reforimei;
 	}
 
+
+
 	public Date getStandbydate() {
 		return standbydate;
 	}
+
+
 
 	public void setStandbydate(Date standbydate) {
 		this.standbydate = standbydate;
@@ -525,29 +696,90 @@ public class Complaint {
 		this.receivedequipmentorrejectestimate = receivedequipmentorrejectestimate;
 	}
 
-	public String getSig_customer1() {
+
+
+	public Boolean getSig_customer1() {
 		return sig_customer1;
 	}
 
-	public void setSig_customer1(String sig_customer1) {
+
+
+	public void setSig_customer1(Boolean sig_customer1) {
 		this.sig_customer1 = sig_customer1;
 	}
 
-	public String getSig_asc_personnel() {
+
+
+	public Boolean getSig_asc_personnel() {
 		return sig_asc_personnel;
 	}
 
-	public void setSig_asc_personnel(String sig_asc_personnel) {
+
+
+	public void setSig_asc_personnel(Boolean sig_asc_personnel) {
 		this.sig_asc_personnel = sig_asc_personnel;
 	}
 
-	public String getSig_customer2() {
+
+
+	public Boolean getSig_customer2() {
 		return sig_customer2;
 	}
 
-	public void setSig_customer2(String sig_customer2) {
+
+
+	public void setSig_customer2(Boolean sig_customer2) {
 		this.sig_customer2 = sig_customer2;
 	}
+
+
+
+	public String getRegisteruser() {
+		return registeruser;
+	}
+
+
+
+	public void setRegisteruser(String registeruser) {
+		this.registeruser = registeruser;
+	}
+
+
+
+	public String getUpdateuser() {
+		return updateuser;
+	}
+
+
+
+	public void setUpdateuser(String updateuser) {
+		this.updateuser = updateuser;
+	}
+
+
+
+	public Date getCreateddate() {
+		return createddate;
+	}
+
+
+
+	public void setCreateddate(Date createddate) {
+		this.createddate = createddate;
+	}
+
+
+	
+	public Date getUpdatedate() {
+		return updatedate;
+	}
+
+
+	public void setUpdatedate(Date updatedate) {
+		this.updatedate = updatedate;
+	}
+
+
 
 	@Override
 	public String toString() {
@@ -564,9 +796,11 @@ public class Complaint {
 				+ fault + ", labour=" + labour + ", part=" + part + ", approved=" + approved + ", standbymodel="
 				+ standbymodel + ", serialno=" + serialno + ", reforimei=" + reforimei + ", standbydate=" + standbydate
 				+ ", receivedequipmentorrejectestimate=" + receivedequipmentorrejectestimate + ", sig_customer1="
-				+ sig_customer1 + ", sig_asc_personnel=" + sig_asc_personnel + ", sig_customer2=" + sig_customer2 + "]";
+				+ sig_customer1 + ", sig_asc_personnel=" + sig_asc_personnel + ", sig_customer2=" + sig_customer2
+				+ ", registeruser=" + registeruser + ", updateuser=" + updateuser + ", createddate=" + createddate
+				+ ", updatedate=" + updatedate + "]";
 	}
 
-	
+    
 	
 }
