@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+ <html xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:th="http://www.thymeleaf.org">
+ 
+ <head>
+ <title>KMobRevamp Factory</title>
+ <link rel="stylesheet" type="text/css" th:href="@{/css/adminhome.css}" />
+ <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
+ <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ </head>
+ 
+ <body>
+    <div class="header">
+	     <h2>KMobRevamp <span class="label label-info badgefont">[Customer Relationship Interface]</span></h2>
+	</div>
+ 	<div class="container font">
+ 		<div class="panel-group" style="margin-top:40px">
+ 			<div class="panel panel-primary">
+ 				<div class="panel-heading nav navbar-default">
+ 				  <div class="row" style="color:white">  
+ 				    <div class="col-xs-5">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li><a th:href="@{/factory/home}" class="" style="color:white">New Complaint</a>
+                            </li>
+                            <li class="active"><a th:href="@{/factory/searchcomplaint}" class="" style="color:white">Search Complaint</a>
+                            </li>
+                            <li><a th:href="@{/factory/registration}" class="" style="color:white">Registration</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-4">
+                       <ul class="nav navbar-nav navbar-right">
+                            <li><span th:utext="${userName}"></span></li>
+                            <li><a th:href="@{/logout}" class="btn btn-danger" style="color:white;padding:2px;margin-left:8px">Logout</a></li>
+                       </ul>     
+                    </div>
+ 				  </div>	   
+ 				</div>
+ 				<div class="panel-body">
+ 					 <form autocomplete="off" action="#" th:action="@{/factory/searchcomplaint}" th:object="${searchComplaint}" method="post" class="form-horizontal" role="form">
+					       <div class="container font">
+					         <div th:if="${saved}" class="row">
+					            <span class="col-xs-11 label label-success" style="font-size:20px">Complaint Updated Successfully</span>
+					            
+					         </div>
+					         <div th:if="${saved}" class="row">
+					         <br/>
+					         </div>
+					         <div class="row">
+					         <div class="col-xs-3"></div>
+					         <div class="col-xs-6">
+					         <input type="text" th:field="*{sno}" placeholder="Serial No"
+								           class="form-control" style="border-style: solid;border-width: 1px;border-color:#5cb85c;margin-bottom:5px;"/> 
+						     <label th:if="${#fields.hasErrors('sno')}" th:errors="*{sno}"
+								           class="validation-message"></label>
+					         
+					         </div>
+					         <div class="col-xs-3"></div>
+					         </div>
+					         <div class="row">
+					         <div class="col-xs-5"></div>
+					         <div class="col-xs-2">
+					         <button class="btn btn-md btn-danger btn-block" name="Submit" value="Submit" type="Submit" th:text="Submit"></button>
+					         </div>
+					         <div class="col-xs-5"></div>
+					         </div>
+					       </div>
+					 </form>
+ 				
+ 					 
+ 				</div>
+ 				
+ 			</div>
+ 		</div>
+ 		
+ 	</div>
+ 	<div style="clear:both">
+	<p class="footer">Copyright © 2017 [KDMSL] All Rights Reserved</p>
+	</div>
+ </body>
+ </html>

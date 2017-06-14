@@ -190,12 +190,13 @@ public class Complaint {
 	@Column(name="updateuser", length=60,nullable=true)
 	private String updateuser;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
 	@Column(name="createddate",nullable=true)
 	private Date createddate;
 	
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss.SSS")
 	@Column(name="updatedate",nullable=true)
 	private Date updatedate;
-	
 	
 
 	public String getSno() {

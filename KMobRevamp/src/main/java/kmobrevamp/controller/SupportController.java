@@ -122,18 +122,13 @@ public class SupportController {
 	@SuppressWarnings("unused")
 	@RequestMapping(value="/support/searchcomplaint", method = RequestMethod.POST)
 	public ModelAndView supportSearchComplaint(@Valid SearchComplaint searchComplaint, BindingResult result){
-		System.out.println("1");
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		System.out.println("2");
 		User user = userService.findUserByEmail(auth.getName());
 		List<Part> parts=partService.getAll();
-		System.out.println("3");
 		PartComparator comparator=new PartComparator();
 		Collections.sort(parts, comparator);
-		System.out.println("4");
 		Complaint complaint=complaintService.findComplaintBySno(searchComplaint.getSno());
-		System.out.println("5");
 		if(complaint!=null)
 		{
 			modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
