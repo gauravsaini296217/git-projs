@@ -1,6 +1,5 @@
 package kmobrevamp.controller;
 
-import java.security.Provider.Service;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import kmobrevamp.comparator.PartComparator;
 import kmobrevamp.model.Complaint;
-import kmobrevamp.model.Factory;
 import kmobrevamp.model.Part;
 import kmobrevamp.model.SearchComplaint;
 import kmobrevamp.model.ServiceCenter;
@@ -93,11 +91,23 @@ public class FactoryController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setRegisteruser(user.getEmail());
 		complaint.setCreateddate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
-		List<Part> parts=partService.getAll();
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*List<Part> parts=partService.getAll();
 		PartComparator comparator=new PartComparator();
 		Collections.sort(parts, comparator);
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
@@ -106,7 +116,7 @@ public class FactoryController {
 		modelAndView.addObject("st","AMC");
 		modelAndView.addObject("saved", true);
 		modelAndView.setViewName("factory/newcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
 	
 	@RequestMapping(value="/factory/searchcomplaint", method = RequestMethod.GET)
@@ -188,15 +198,27 @@ public class FactoryController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setUpdateuser(user.getEmail());
 		complaint.setUpdatedate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
-		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
 		modelAndView.addObject("searchComplaint",new SearchComplaint());
 		modelAndView.addObject("saved",true);
 		modelAndView.setViewName("factory/searchcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
 	
 	@RequestMapping(value="/factory/registration", method=RequestMethod.GET)

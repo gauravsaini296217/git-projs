@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ch.qos.logback.classic.pattern.Util;
 import kmobrevamp.comparator.PartComparator;
 import kmobrevamp.model.Complaint;
 import kmobrevamp.model.Part;
@@ -36,6 +37,7 @@ public class SupportController {
 	
 	@Autowired
 	private PartService partService;
+	
 	
 	@RequestMapping(value="/support/home", method = RequestMethod.GET)
 	public ModelAndView factoryhome(){
@@ -89,11 +91,23 @@ public class SupportController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setRegisteruser(user.getEmail());
 		complaint.setCreateddate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
-		List<Part> parts=partService.getAll();
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*List<Part> parts=partService.getAll();
 		PartComparator comparator=new PartComparator();
 		Collections.sort(parts, comparator);
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
@@ -102,7 +116,7 @@ public class SupportController {
 		modelAndView.addObject("st","AMC");
 		modelAndView.addObject("saved", true);
 		modelAndView.setViewName("support/newcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
 	
 	
@@ -180,15 +194,30 @@ public class SupportController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setUpdateuser(user.getEmail());
 		complaint.setUpdatedate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
 		modelAndView.addObject("searchComplaint",new SearchComplaint());
 		modelAndView.addObject("saved",true);
 		modelAndView.setViewName("support/searchcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
+	
+	
 	
 }

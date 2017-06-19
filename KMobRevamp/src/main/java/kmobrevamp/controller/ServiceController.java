@@ -91,11 +91,23 @@ public class ServiceController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setRegisteruser(user.getEmail());
 		complaint.setCreateddate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
-		List<Part> parts=partService.getAll();
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*List<Part> parts=partService.getAll();
 		PartComparator comparator=new PartComparator();
 		Collections.sort(parts, comparator);
 		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
@@ -104,7 +116,7 @@ public class ServiceController {
 		modelAndView.addObject("st","AMC");
 		modelAndView.addObject("saved", true);
 		modelAndView.setViewName("service/newcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
 	
 	
@@ -188,15 +200,27 @@ public class ServiceController {
 		}
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
+		String[] strings;
+		if(!complaint.getPart().contains("Select"))
+		{
+		strings=kmobrevamp.util.Util.split(complaint.getPart());
+		complaint.setPartname(strings[0]);
+		complaint.setPartprice(Float.parseFloat(strings[1]));
+		}
+		else{
+			complaint.setPartname("");
+			complaint.setPartprice(0.0f);	
+			}
 		complaint.setUpdateuser(user.getEmail());
 		complaint.setUpdatedate(new Date());	
 		System.out.println(complaint.toString());
 		complaintService.saveComplaint(complaint);
-		modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
+		return new ModelAndView("pdfView", "complaint", complaint);
+		/*modelAndView.addObject("userName", "Welcome " + user.getName() + " (" + user.getEmail() + ")");
 		modelAndView.addObject("searchComplaint",new SearchComplaint());
 		modelAndView.addObject("saved",true);
 		modelAndView.setViewName("service/searchcomplaint");
-		return modelAndView;
+		return modelAndView;*/
 	}
 	
 	@RequestMapping(value="/service/registration", method=RequestMethod.GET)

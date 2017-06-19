@@ -153,7 +153,13 @@ public class Complaint {
 	private float labour;
 	
 	@Column(name="part",nullable=true)
-	private float part;
+	private String part;
+	
+	@Column(name="partname",nullable=true)
+	private String partname;
+	
+	@Column(name="partprice",nullable=true)
+	private float partprice;
 	
 	@Column(name="approved",nullable=true)
 	private Boolean approved;
@@ -617,16 +623,32 @@ public class Complaint {
 		this.labour = labour;
 	}
 
-
-
-	public float getPart() {
+	public String getPart() {
 		return part;
+	}
+
+	public void setPart(String part) {
+		this.part = part;
+	}
+
+	public String getPartname() {
+		return partname;
+	}
+
+	public void setPartname(String partname) {
+		this.partname = partname;
 	}
 
 
 
-	public void setPart(float part) {
-		this.part = part;
+	public float getPartprice() {
+		return partprice;
+	}
+
+
+
+	public void setPartprice(float partprice) {
+		this.partprice = partprice;
 	}
 
 

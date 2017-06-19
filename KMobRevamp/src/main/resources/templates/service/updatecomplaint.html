@@ -6,8 +6,8 @@
  <title>KMobRevamp Service</title>
  <link rel="stylesheet" type="text/css" th:href="@{/css/adminhome.css}" />
  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
- <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'/>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
  <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  </head>
@@ -58,7 +58,7 @@
 					            </div>
 					            <div class="col-xs-3">
 					            <input type="text" th:field="*{sno}" placeholder="Serial No"
-								           class="form-control" readonly/> 
+								           class="form-control" readonly="readonly"/> 
 						            <label th:if="${#fields.hasErrors('sno')}" th:errors="*{sno}"
 								           class="validation-message"></label>
 					            </div>
@@ -66,7 +66,7 @@
 					            <table border="1">
 					            <tr>
 					               <td style="padding:3px"></td>
-					               <td style="padding:3px"><h5>Date & Time[DD-MM-YYYY HH:mm]</h5></td>
+					               <td style="padding:3px"><h5>Date &amp; Time[DD-MM-YYYY HH:mm]</h5></td>
 					            </tr>
 					            <tr>
 					               <td style="padding:3px">IN</td>
@@ -145,7 +145,7 @@
 								           class="form-control" /> 
 						              <label th:if="${#fields.hasErrors('dateofpurchase')}" th:errors="*{dateofpurchase}"
 								           class="validation-message"></label>
-								      <input type="text" th:value="${st}" class="form-control" readonly/> 
+								      <input type="text" th:value="${st}" class="form-control" readonly="readonly"/> 
 						              <input type="hidden" name="status" th:value="${st}"/>
 					            </div>
 					            <div class="col-xs-1"></div>
@@ -170,11 +170,11 @@
 								</div>
 								<div class="col-xs-1"></div>
 								<div class="col-xs-3">
-								<table border=1>
-								<tr><td colspan=2 style="padding:5px">FORSTAR TECHNO SOLUTIONS PRIVATE LIMITED</td></tr>
-								<tr><td colspan=2 style="padding:5px">IT Park, Ganga Malanpur, Morena link Road</td></tr>
-								<tr><td colspan=2 style="padding:5px">Gwalior M.P. 474003</td></tr>
-								<tr><td colspan=2 style="padding:5px">Customer care no : 0751 715 0001</td></tr>
+								<table border="1">
+								<tr><td colspan="2" style="padding:5px">FORSTAR TECHNO SOLUTIONS PRIVATE LIMITED</td></tr>
+								<tr><td colspan="2" style="padding:5px">IT Park, Ganga Malanpur, Morena link Road</td></tr>
+								<tr><td colspan="2" style="padding:5px">Gwalior M.P. 474003</td></tr>
+								<tr><td colspan="2" style="padding:5px">Customer care no : 0751 715 0001</td></tr>
 								<tr>
 								    <td style="padding:5px">support@forstarindia.com</td>
 								    <td style="padding:5px">www.forstarindia.com</td>
@@ -269,9 +269,9 @@
 								           class="validation-message"></label>
 							 <div class="row">
 							 <div class="col-xs-4">
-							 <table border=1 style="width:200px">
+							 <table border="1" style="width:200px">
 							 <tr>
-							 <td colspan=2 style="padding:3px" align="center">Estimate Details</td>
+							 <td colspan="2" style="padding:3px" align="center">Estimate Details</td>
 							 </tr>
 							 <tr>
 							 <td style="padding:3px" align="center">Type</td>
@@ -297,15 +297,15 @@
 							 <tr>
 							 <td style="padding:3px" align="center">Approved</td>
 							 <td style="padding:3px" align="center">
-							 <input type="checkbox" th:field="*{approved}">
+							 <input type="checkbox" th:field="*{approved}"/>
 						     </td>
 							 </tr>
 							 </table>
 							 </div>	 
 							 <div class="col-xs-7">
-							 <table border=1 style="width:500px">
+							 <table border="1" style="width:500px">
 							 <tr>
-							 <td colspan=2 style="padding:3px" align="left">Details of Stand by model issued:</td>
+							 <td colspan="2" style="padding:3px" align="left">Details of Stand by model issued:</td>
 							 </tr>
 							 <tr>
 							 <td style="padding:2px" align="center">Stand By Model</td>
@@ -359,7 +359,7 @@
 					         <div class="col-xs-7">
 					         <div style="margin-top:3px;margin-bottom:3px">I will update it later</div>
 					         <div style="margin-top:3px;margin-bottom:3px">I have received the equipment in satisfactory working conditions</div>
-					         <div style="margin-top:3px;margin-bottom:3px">I here by reject the estimate given & take back the handset as per my wish</div>
+					         <div style="margin-top:3px;margin-bottom:3px">I here by reject the estimate given &amp; take back the handset as per my wish</div>
 					         </div>
 					         <div class="col-xs-1">
 					         <div style="margin-top:3px;margin-bottom:3px"><input type="radio" th:field="*{receivedequipmentorrejectestimate}" value="willupdate"></input></div>
@@ -398,8 +398,8 @@
 					         <br/>
 					         <br/>
 							 </div>
-							 <input type="hidden" th:field="*{registeruser}">
-							 <input type="hidden" th:field="*{createddate}">
+							 <input type="hidden" th:field="*{registeruser}"/>
+							 <input type="hidden" th:field="*{createddate}"/>
  					 </form>
  					 
  				</div>

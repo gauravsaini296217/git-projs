@@ -11,7 +11,6 @@
  <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
  </head>
- 
  <body>
     <div class="header">
 	     <h2>KMobRevamp <span class="label label-info badgefont">[Customer Relationship Interface]</span></h2>
@@ -41,7 +40,7 @@
  				</div>
  				<div class="panel-body">
  					 
- 					 <form autocomplete="off" action="#" th:action="@{/support/updatecomplaint}" th:object="${complaint}" method="post" class="form-horizontal" role="form" target="_blank">
+ 					 <form autocomplete="off" action="#" th:action="@{/support/updatecomplaint}" th:object="${complaint}" method="post" class="form-horizontal" role="form" target="_blank" name="form1">
 					       <div class="container font">
 					         <div th:if="${saved}" class="row">
 					            <span class="col-xs-11 label label-success" style="font-size:20px">Complaint Saved Successfully</span>
@@ -288,7 +287,7 @@
 							 <td style="padding:3px" align="center">Part</td>
 							 <td style="padding:3px" align="center">
 							    <select class="form-control" th:field="*{part}"  id="dropFactory">
-                                       <option th:each="prt : ${parts}" th:value="${prt.part}+'-'+${prt.rate}" th:text="${prt.part}+'-'+${prt.rate}"></option>
+                                       <option th:each="prt : ${parts}" th:value="${prt.part}+${prt.rate}" th:text="${prt.part}+'-'+${prt.rate}"></option>
                                 </select>
 						     </td>
 							 </tr>
@@ -389,7 +388,7 @@
 					         <div class="row">
 					         <div class="col-xs-4"></div>
 					         <div class="col-xs-3">
-					         <button class="btn btn-md btn-danger btn-block" name="Submit" value="Submit" type="Submit" th:text="Submit"></button>
+					         <button class="btn btn-md btn-danger btn-block" id="Submit" name="Submit" value="Submit" type="Submit" th:text="Submit"></button>
 					         </div>
 					         <div class="col-xs-4"></div>
 					         </div>
@@ -410,4 +409,5 @@
 	<p class="footer">Copyright © 2017 [KDMSL] All Rights Reserved</p>
 	</div>
  </body>
+
  </html>
