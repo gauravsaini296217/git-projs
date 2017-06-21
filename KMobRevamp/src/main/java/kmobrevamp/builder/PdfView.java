@@ -272,7 +272,7 @@ public class PdfView extends AbstractItextPdfView {
         cell = new PdfPCell();
         cell.setHorizontalAlignment(PdfPCell.ALIGN_LEFT);
         cell.setPadding(5);
-        cell.setPhrase(new Phrase("Part"+(complaint.getPartname().equalsIgnoreCase("")?"":"-"+complaint.getPartname()), font));
+        cell.setPhrase(new Phrase("Part"+(complaint.getPartname().equalsIgnoreCase("")?"":"-"+complaint.getPartname()), font1));
         firstTable.addCell(cell);
         
         cell = new PdfPCell();
