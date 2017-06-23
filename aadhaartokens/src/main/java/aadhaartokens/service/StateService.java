@@ -8,4 +8,6 @@ public interface StateService {
 
 	public List<State> getAll();
 	
+	public State getState(int stateid);
+	
 }

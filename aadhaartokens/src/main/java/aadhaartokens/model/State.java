@@ -5,18 +5,53 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.internal.util.compare.ComparableComparator;
+
 @Entity
 @Table(name="statemaster")
-public class State {
+public class State implements Comparable<State>{
+	
+	
+
+	@Override
+	public int compareTo(State o) {
+		
+		return this.statename.compareTo(o.statename);
+	}
 
 	@Id
 	@Column(name="stateid")
-	private int StateID;
+	public int stateid;
 	
 	@Column(name="statename", columnDefinition="nvarchar(50)")
-	private String StateName;
+	public String statename;
 	
 	@Column(name="agencyid", columnDefinition="int")
-	private int AgencyID;
+	private int agencyid;
+
+	public int getStateid() {
+		return stateid;
+	}
+
+	public void setStateid(int stateid) {
+		this.stateid = stateid;
+	}
+
+	public String getStatename() {
+		return statename;
+	}
+
+	public void setStatename(String statename) {
+		this.statename = statename;
+	}
+
+	public int getAgencyid() {
+		return agencyid;
+	}
+
+	public void setAgencyid(int agencyid) {
+		this.agencyid = agencyid;
+	}
+	
 	
 }
