@@ -10,3 +10,4 @@ public interface EntryTypeService {
 	
 	public EntryType getEntryType(int typeid);
 }
+	

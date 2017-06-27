@@ -8,5 +8,5 @@ import aadhaartokens.model.EntryType;
 
 @Repository("EntryTypeRepository")
 public interface EntryTypeRepository extends JpaRepository<EntryType, Integer> {
-
+	
 }

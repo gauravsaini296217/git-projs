@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class EntryType {
 	
 	
-	@Id
+	@Id 
 	@Column(name="typeid")
 	private int typeid;
 	

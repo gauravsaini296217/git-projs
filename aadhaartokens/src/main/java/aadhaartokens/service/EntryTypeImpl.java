@@ -22,5 +22,5 @@ public class EntryTypeImpl implements EntryTypeService{
 	public EntryType getEntryType(int typeid) {
 		return entryTypeRepository.findOne(typeid);
 	}
-
+	
 }
