@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import aadhaartokens.model.EnrolmentType;
-import aadhaartokens.repository.EnrolTypRepository;
+import aadhaartokens.repository.EnrolmentTypeRepository;
 
-@Service("EnrolmentTypeService")
-public class EnrolTypServiceImp implements EnrolmentTypeService {
+@Service("enrolmentTypeService")
+public class EnrolmentTypeServiceImpl implements EnrolmentTypeService {
 
 	@Autowired
-	EnrolTypRepository enrolTypRepository;
+	EnrolmentTypeRepository enrolTypRepository;
 	
 	public List<EnrolmentType> getAll(){
 		return enrolTypRepository.findAll();

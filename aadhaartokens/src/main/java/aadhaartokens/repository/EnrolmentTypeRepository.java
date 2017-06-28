@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import aadhaartokens.model.EnrolmentType;
 
-@Repository("EntroTypRepository")
-public interface EnrolTypRepository extends JpaRepository<EnrolmentType, Integer>{
+@Repository("enrolmentTypeRepository")
+public interface EnrolmentTypeRepository extends JpaRepository<EnrolmentType, Integer>{
 
 }

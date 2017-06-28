@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="AadhaarTokenEntryType")
+@Table(name="aadhaartokenentrytype")
 public class EntryType {
 	
 	
@@ -16,20 +16,23 @@ public class EntryType {
 	
 	@Column(name="information", columnDefinition="nvarchar(40)")
 	private String information;
-	
-	public int getTypeID(){
+
+	public int getTypeid() {
 		return typeid;
 	}
-	
-	public void setTypeID(int typeid){
-		this.typeid=typeid;
+
+	public void setTypeid(int typeid) {
+		this.typeid = typeid;
 	}
-	
-	public String getInformation(){
+
+	public String getInformation() {
 		return information;
 	}
-	
-	public void setInformation(String information){
-		this.information=information;
+
+	public void setInformation(String information) {
+		this.information = information;
 	}
+	
+	
+	
 }

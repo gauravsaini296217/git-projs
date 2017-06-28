@@ -10,6 +10,147 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+$(function() { displayAadhaarorNot(); });
+
+$(function() { displayChooseDateorNot(); });
+
+function showDistricts() {
+var states= /*[[${states}]]*/;
+var selectedIndex = $("#stateSupport option:selected").index();
+var state=states[selectedIndex];
+
+
+var districts= /*[[${districts}]]*/;
+$('#districtSupport')
+.find('option')
+.remove()
+.end();
+$('#pecSupport')
+.find('option')
+.remove()
+.end();
+for (i = 0; i < districts.length; i++) {
+var district=districts[i];
+if(district.stateid==state.stateid)
+{
+
+    $('#districtSupport').append($('<option>', { 
+        value: district.districtid,
+        text : district.districtname 
+    }));
+
+}
+
+}
+
+$('#districtSupport').trigger('change');
+		
+}
+
+function showPecs() {
+	
+	var districts= new Array();
+	var districts1= new Array();
+	$("#districtSupport option").each(function()
+			{
+			    districts1.push($(this).val());
+			});
+	var districts2= /*[[${districts}]]*/;
+	for(p=0;p<districts1.length;p++)
+	{
+		var dist1=districts1[p];
+	     for(q=0;q<districts2.length;q++)
+		{
+		  dist2=districts2[q];
+		  if(dist1==dist2.districtid)
+			  {
+			  
+			  districts.push(dist2);
+			  
+			  }
+			
+			
+			
+			
+		}	
+		
+		
+	}
+	var selectedIndex = $("#districtSupport option:selected").index();
+	var district=districts[selectedIndex];
+    var pecs= /*[[${pecs}]]*/;
+	$('#pecSupport')
+	.find('option')
+	.remove()
+	.end();
+	for (i = 0; i < pecs.length; i++) {
+	var pec=pecs[i];
+	if(district.districtid==pec.districtid)
+	{
+	
+	    $('#pecSupport').append($('<option>', { 
+	        value: pec.pecid,
+	        text : pec.pecname 
+	    }));
+
+	}
+	}
+	
+
+		
+	}
+
+function selectDate(rid,rdate,ravtoken,rmxtoken,rtimeslot,rpeccode) {
+	
+	document.getElementById("rid").value = rid;
+	document.getElementById("rdate").value = rdate;
+	document.getElementById("ravtoken").value = ravtoken;
+	document.getElementById("rmxtoken").value = rmxtoken;
+	document.getElementById("rtimeslot").value = rtimeslot;
+	document.getElementById("rpeccode").value = rpeccode;
+}
+
+function displayAadhaarorNot() {
+	
+	var enrolType = document.getElementById('enrolTypeSupport');
+	var enrolTypeData = enrolType.options[enrolType.selectedIndex].text;
+	
+	if(enrolTypeData=='NEW')
+	{
+	
+		document.getElementById('aadhaar').style.display = 'none';
+		
+	}
+	else{
+		
+		document.getElementById('aadhaar').style.display = 'block';
+	}
+	
+}
+
+function displayChooseDateorNot() {
+	
+	var entryType = document.getElementById('entryTypeSupport');
+	var entryTypeData = entryType.options[entryType.selectedIndex].text;
+	
+	if(entryTypeData=='Partial Information')
+	{
+	
+		document.getElementById('choosedate').style.display = 'block';
+		
+	}
+	else{
+		
+		document.getElementById('choosedate').style.display = 'none';
+	}
+	
+}
+
+/*]]>*/
+</script>
+
 </head>
 
 <body>
@@ -18,36 +159,217 @@
 	</div>
 	<div class="container font">
 	    <div class="row loginpanelspace">
-		    <div class="col-md-6 col-md-offset-2">
+		    <div class="col-md-8 col-md-offset-2">
 		        <div class="login-panel panel panel-primary ppanel">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
+                        <h3 class="panel-title">Get Token</h3>
                     </div>
                     <div class="panel-body">
-                     <form autocomplete="off" action="#" th:action="@{/service/registration}"
+                     <form autocomplete="off" action="#" th:action="@{/}"
 					           th:object="${tokenRequest}" method="post" class="form-horizontal"
-					           role="form">
+					           role="form" >
 					        <div class="form-group">
 					            <div class="row">
-					            <div class="col-sm-6">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
 					            State
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            District
 					            </div>
 					            </div>
 					            <div class="row">
-					            <div class="col-sm-6">
-					               <select class="form-control" th:field="*{state}"  id="dropSupport">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <select class="form-control" th:field="*{state}"  id="stateSupport" name="stateSupport" onChange="showDistricts()">
                                        <option th:each="st : ${states}" th:value="${st.stateid}" th:text="${st.statename}"></option>
+                                   </select>
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <select class="form-control" th:field="*{district}"  id="districtSupport" name="districtSupport" onChange="showPecs()">
+                                       <option th:each="dt : ${districts}" th:value="${dt.districtid}" th:text="${dt.districtname}"></option>
                                    </select>
 					            </div>
 					            </div>
 					        </div>
 							
+							<div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            Pec
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            EnrolType
+					            </div>
+					            </div>
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <select class="form-control" th:field="*{pec}"  id="pecSupport" name="pecSupport">
+                                       <option th:each="pec : ${pecs}" th:value="${pec.pecid}" th:text="${pec.pecname}"></option>
+                                   </select>
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <select class="form-control" th:field="*{enroltype}"  id="enrolTypeSupport" name="enrolTypeSupport" onChange="displayAadhaarorNot()">
+                                       <option th:each="et : ${enrolmenttypes}" th:value="${et.sno}" th:text="${et.enrolmenttype}"></option>
+                                   </select>
+					            </div>
+					            </div>
+					        </div>
+							
+							<div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            <input type="text" th:field="*{name}" placeholder="Name"
+								           class="form-control" /> 
+						        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+								           class="validation-message"></label>
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-2">
+					            <input type="text" th:field="*{mobile}" placeholder="Mobile No."
+								           class="form-control" /> 
+						        <label th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"
+								           class="validation-message"></label>
+								<input type="hidden" th:field="*{time}" class="form-control"/>   
+								<input type="hidden" th:field="*{status}" class="form-control"/>          
+					            </div>
+					            <div class="col-sm-2">
+					            <button type="submit" class="btn btn-danger btn-block">Generate OTP</button>
+					            </div>
+					            </div>
+					            
+					        </div>
+							
+							<div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-2">
+					            <input type="text" th:field="*{otp}" placeholder="OTP"
+								           class="form-control" /> 
+						        <label th:if="${#fields.hasErrors('otp')}" th:errors="*{otp}"
+								           class="validation-message"></label>
+								</div>
+					            <div class="col-sm-2">
+					            <button type="submit" class="btn btn-danger btn-block">Validate OTP</button>
+					            </div>
+					            </div>
+					            
+					        </div>
+					        
 					        <div class="form-group">
-						        <div class="col-sm-9">
-							        <button type="submit" class="btn btn-primary btn-block">Register User</button>
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            EntryType
+					            </div>
+					            </div>
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <input type="text" th:field="*{email}" placeholder="Email"
+								           class="form-control" /> 
+						           <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+								           class="validation-message"></label>
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <select class="form-control" th:field="*{entrytype}"  id="entryTypeSupport" name="entryTypeSupport"  onChange="displayChooseDateorNot()">
+                                       <option th:each="et : ${entrytypes}" th:value="${et.typeid}" th:text="${et.information}"></option>
+                                   </select>
+					            </div>
+					            </div>
+					        </div>
+							
+							<div class="form-group">
+							    <div class="row">
+							      <div class="col-sm-1"></div>
+							      <div class="col-sm-4" id="choosedate">
+			                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Choose Date</button>
+			                        
+			                        <div id="myModal" class="modal fade" role="dialog">
+                                       <div class="modal-dialog" style="width:70%;">
+
+                                            <!-- Modal content-->
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Choose Date</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                           <div class="row" th:each="rowdate : ${rowdates}" >
+                                             <div class="col-sm-4"  style="border: 1px solid black;" th:each="datetoken : ${rowdate.branchDateTokens}" th:onclick="'selectDate(\'' + ${datetoken.id} + '\',\'' + ${datetoken.date} + '\',\'' + ${datetoken.availabletokenno}  + '\',\'' + ${datetoken.maxtokens}  + '\',\'' + ${datetoken.timeslot}  + '\',\'' + ${datetoken.peccode} + '\');'">
+                                             <div class="media">
+                                              
+                                              <div class="media-body">
+                                                 <h5 class="media-heading">Available Date:<strong><label th:text="${datetoken.date}"></label></strong></h5>
+                                                  <h5 class="media-heading">Available Time:<strong><label th:text="${datetoken.timeslot}"></label></strong></h5>
+                                                  <h5 class="media-heading">Token Status:</h5>
+                                                 <p style="font-size: 20px;"><strong><label th:text="${datetoken.availabletokenno}+'/'+${datetoken.maxtokens}"></label></strong></p>
+                                              </div>
+                                              </div>
+                                           
+                                             </div>
+                                           </div>
+                                        </div>
+                                        
+                                        </div>
+
+                                        </div>
+                                     </div>
+                                   </div> 
+                                   <div class="col-sm-1"></div> 
+                                   <div class="col-sm-4">
+                                   <input type="text" th:field="*{aadhaar}" placeholder="Aadhaar"
+								           class="form-control" /> 
+						          <label th:if="${#fields.hasErrors('aadhaar')}" th:errors="*{aadhaar}"
+								           class="validation-message"></label>
+                                   </div>
+                                </div>
+                                
+                                <input type="hidden" th:field="*{rid}" class="form-control"/>   
+								<input type="hidden" th:field="*{rdate}" class="form-control"/>          
+                                <input type="hidden" th:field="*{ravtoken}" class="form-control"/>   
+								<input type="hidden" th:field="*{rmxtoken}" class="form-control"/>          
+                                <input type="hidden" th:field="*{rtimeslot}" class="form-control"/>   
+								<input type="hidden" th:field="*{rpeccode}" class="form-control"/>          
+                                      
+                                      
+			                </div>
+							
+							
+					        <div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-5"></div>
+						        <div class="col-sm-2">
+							        <button type="submit" class="btn btn-danger btn-block">Register User</button>
+						        </div>
+						        <div class="col-sm-5"></div>
 						        </div>
 					        </div>
 					
+					       <div th:if="${message}" class="form-group">
+					            <div class="row">
+					            <div class="col-xs-1"></div>
+					                <span class="col-xs-10 label label-success" th:text="${msg}" style="font-size:20px"></span>
+						        <div class="col-xs-1"></div>
+						        </div>
+						        <div class="row"></div>
+						        <div class="row"></div>
+					        </div>
+					    
 					   </form>
 		            </div>
                 </div>

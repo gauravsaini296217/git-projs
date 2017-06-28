@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -36,15 +37,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     public ThymeleafViewResolver getViewResolver(){
     	ThymeleafViewResolver viewResolver = new ThymeleafViewResolver(); 
     	viewResolver.setTemplateEngine(getTemplateEngine());
-    	viewResolver.setOrder(1);
+    	viewResolver.setOrder(2);
 	return viewResolver;
     }
 	
-/*	@Bean  
+	@Bean  
     public ResourceBundleViewResolver resourceBundleViewResolver() {  
 	    ResourceBundleViewResolver resolver = new ResourceBundleViewResolver();
 	    resolver.setBasename("views");
 	    resolver.setOrder(1);
         return resolver;  
-    }*/
+    }
 }
