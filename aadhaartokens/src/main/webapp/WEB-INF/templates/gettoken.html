@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<title>Aadhaar Token</title>
+	<title>Aadhaar Online Appointment Service</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
 	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
 	<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'/>
@@ -12,6 +12,8 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
+
+
 $(function() { displayAadhaarorNot(); });
 
 $(function() { displayChooseDateorNot(); });
@@ -102,15 +104,6 @@ function showPecs() {
 		
 	}
 
-function selectDate(rid,rdate,ravtoken,rmxtoken,rtimeslot,rpeccode) {
-	
-	document.getElementById("rid").value = rid;
-	document.getElementById("rdate").value = rdate;
-	document.getElementById("ravtoken").value = ravtoken;
-	document.getElementById("rmxtoken").value = rmxtoken;
-	document.getElementById("rtimeslot").value = rtimeslot;
-	document.getElementById("rpeccode").value = rpeccode;
-}
 
 function displayAadhaarorNot() {
 	
@@ -148,6 +141,46 @@ function displayChooseDateorNot() {
 	
 }
 
+
+function validateForm() {
+	
+	var aadhaar=document.getElementById("aadhaar").value;
+	var enrolType=document.getElementById("enrolTypeSupport");
+	var enrolTypeData=enrolType.options[enrolType.selectedIndex].value;
+	if(aadhaar=='' && enrolTypeData!='1')
+		{
+		alert("Aadhaar is Mandatory if it is Updation case");
+		return false;
+		}
+	
+	
+	var rdate=document.getElementById("rdate").value;
+	var rtimeslot=document.getElementById("rtimeslot").value;
+	var pec=document.getElementById("pecSupport");
+	var pecname=pec.options[pec.selectedIndex].text;
+	
+	if(rdate=='')
+	{
+	alert("Choose Appointment Date");
+	return false;
+	}
+	
+	
+	if(confirm("Your Selected Appointment is [ Date-"+rdate+", Timeslot-"+rtimeslot+", Pec-"+pecname+" ].\n"+"Do you want to continue?"))
+	{
+	$("#AppointmentForm").attr('target', '_blank');
+	setTimeout(function(){ window.location.href = 'http://203.176.156.222:8080/aadhaartokens/'; }, 5000); 
+	return true;
+	
+	}
+else{
+	return false;	
+	
+}
+	
+}
+
+
 /*]]>*/
 </script>
 
@@ -155,19 +188,30 @@ function displayChooseDateorNot() {
 
 <body>
     <div class="header">
-	     <h2>Aadhaar Token <span class="label label-info badgefont">[Resident Portal]</span></h2>
+      <div class="row">
+         <!-- <div class="col-sm-1" style="background-color: MidnightBlue;"></div> -->
+         <div class="col-sm-3" style="background-color: MidnightBlue;padding-top:4px;padding-bottom:9px;padding-left:20px">
+	     <h2 style="padding-top:4px;padding-bottom:4px;padding-left:20px"><span><img th:src="@{/images/aadhaarlogo.png}"/></span></h2>
+	     </div>
+	     <div class="col-sm-7" style="background-color: MidnightBlue;">
+	     <h2>Aadhaar Online Appointment Service <span class="label label-info badgefont">[Resident Portal]</span></h2>
+	     </div>
+	     <div class="col-sm-2" style="background-color: MidnightBlue;padding:12px">
+	     <h2 style="padding:4px"><span style="background-color: white;padding-top:1px;padding-bottom:3px;padding-left:2px;padding-right:2px"><img th:src="@{/images/karvygrouplogo.png}"/></span></h2>
+	     </div>
+	</div>
 	</div>
 	<div class="container font">
 	    <div class="row loginpanelspace">
 		    <div class="col-md-8 col-md-offset-2">
 		        <div class="login-panel panel panel-primary ppanel">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Get Token</h3>
+                        <h3 class="panel-title">Schedule Appointment</h3>
                     </div>
                     <div class="panel-body">
                      <form autocomplete="off" action="#" th:action="@{/}"
 					           th:object="${tokenRequest}" method="post" class="form-horizontal"
-					           role="form" >
+					           role="form" id="AppointmentForm">
 					        <div class="form-group">
 					            <div class="row">
 					            <div class="col-sm-1"></div>
@@ -182,13 +226,13 @@ function displayChooseDateorNot() {
 					            <div class="row">
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
-					               <select class="form-control" th:field="*{state}"  id="stateSupport" name="stateSupport" onChange="showDistricts()">
+					               <select class="form-control" th:field="*{state}"  id="stateSupport" name="stateSupport" onChange="showDistricts()"  th:readonly="${disable}">
                                        <option th:each="st : ${states}" th:value="${st.stateid}" th:text="${st.statename}"></option>
                                    </select>
 					            </div>
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
-					               <select class="form-control" th:field="*{district}"  id="districtSupport" name="districtSupport" onChange="showPecs()">
+					               <select class="form-control" th:field="*{district}"  id="districtSupport" name="districtSupport" onChange="showPecs()"   th:readonly="${disable}">
                                        <option th:each="dt : ${districts}" th:value="${dt.districtid}" th:text="${dt.districtname}"></option>
                                    </select>
 					            </div>
@@ -209,13 +253,13 @@ function displayChooseDateorNot() {
 					            <div class="row">
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
-					               <select class="form-control" th:field="*{pec}"  id="pecSupport" name="pecSupport">
+					               <select class="form-control" th:field="*{pec}"  id="pecSupport" name="pecSupport"  th:readonly="${disable}">
                                        <option th:each="pec : ${pecs}" th:value="${pec.pecid}" th:text="${pec.pecname}"></option>
                                    </select>
 					            </div>
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
-					               <select class="form-control" th:field="*{enroltype}"  id="enrolTypeSupport" name="enrolTypeSupport" onChange="displayAadhaarorNot()">
+					               <select class="form-control" th:field="*{enroltype}"  id="enrolTypeSupport" name="enrolTypeSupport" onChange="displayAadhaarorNot()"   th:readonly="${disable}">
                                        <option th:each="et : ${enrolmenttypes}" th:value="${et.sno}" th:text="${et.enrolmenttype}"></option>
                                    </select>
 					            </div>
@@ -227,14 +271,14 @@ function displayChooseDateorNot() {
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
 					            <input type="text" th:field="*{name}" placeholder="Name"
-								           class="form-control" /> 
+								           class="form-control"   th:readonly="${disable}"/> 
 						        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
 								           class="validation-message"></label>
 					            </div>
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-2">
 					            <input type="text" th:field="*{mobile}" placeholder="Mobile No."
-								           class="form-control" /> 
+								           class="form-control"   th:readonly="${disable}"/> 
 						        <label th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"
 								           class="validation-message"></label>
 								<input type="hidden" th:field="*{time}" class="form-control"/>   
@@ -247,7 +291,7 @@ function displayChooseDateorNot() {
 					            
 					        </div>
 							
-							<div class="form-group">
+							<div th:if="${tokenRequest.status != 'N'}" class="form-group">
 					            <div class="row">
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
@@ -255,7 +299,7 @@ function displayChooseDateorNot() {
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-2">
 					            <input type="text" th:field="*{otp}" placeholder="OTP"
-								           class="form-control" /> 
+								           class="form-control" th:readonly="${tokenRequest.status == 'V'} and ${disable}"/> 
 						        <label th:if="${#fields.hasErrors('otp')}" th:errors="*{otp}"
 								           class="validation-message"></label>
 								</div>
@@ -293,7 +337,7 @@ function displayChooseDateorNot() {
 					            </div>
 					        </div>
 							
-							<div class="form-group">
+							<div th:if="${tokenRequest.status == 'V'}" class="form-group" >
 							    <div class="row">
 							      <div class="col-sm-1"></div>
 							      <div class="col-sm-4" id="choosedate">
@@ -306,11 +350,24 @@ function displayChooseDateorNot() {
                                         <div class="modal-content">
                                         <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Choose Date</h4>
+                                        <div class="row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-2"><h4 class="modal-title">Choose Date</h4></div>
+                                        <div class="col-sm-9"></div>
                                         </div>
-                                        <div class="modal-body">
-                                           <div class="row" th:each="rowdate : ${rowdates}" >
-                                             <div class="col-sm-4"  style="border: 1px solid black;" th:each="datetoken : ${rowdate.branchDateTokens}" th:onclick="'selectDate(\'' + ${datetoken.id} + '\',\'' + ${datetoken.date} + '\',\'' + ${datetoken.availabletokenno}  + '\',\'' + ${datetoken.maxtokens}  + '\',\'' + ${datetoken.timeslot}  + '\',\'' + ${datetoken.peccode} + '\');'">
+                                        <div class="row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-8"><label id="displayText" style="font-size:20px;color:#5cb85c;text-align: left;"></label></div>
+                                        <div class="col-sm-2"><button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Submit</button></div>
+                                        <div class="col-sm-1"></div>
+                                        </div>
+                                        
+                                        
+                                        </div>
+                                        <div class="modal-body" id="rf">
+                                           <div class="row" th:each="rowdate : ${rowdates}">
+                                             <div class="col-sm-1"></div>
+                                             <div class="col-sm-3" th:style="${datetoken.selected} ? 'border: 2px solid #428bca;' : 'border: 1px solid black;'" th:each="datetoken : ${rowdate.branchDateTokens}" th:onclick="'selectDate(\'' + ${datetoken.id} + '\',\'' + ${datetoken.date} + '\',\'' + ${datetoken.availabletokenno}  + '\',\'' + ${datetoken.maxtokens}  + '\',\'' + ${datetoken.timeslot}  + '\',\'' + ${datetoken.peccode} + '\');'" th:id="${datetoken.id}" >
                                              <div class="media">
                                               
                                               <div class="media-body">
@@ -322,6 +379,7 @@ function displayChooseDateorNot() {
                                               </div>
                                            
                                              </div>
+                                             <div class="col-sm-1"></div>
                                            </div>
                                         </div>
                                         
@@ -349,12 +407,20 @@ function displayChooseDateorNot() {
                                       
 			                </div>
 							
-							
-					        <div class="form-group">
+							<div class="form-group">
 					            <div class="row">
-					            <div class="col-sm-5"></div>
-						        <div class="col-sm-2">
-							        <button type="submit" class="btn btn-danger btn-block">Register User</button>
+					            <div class="col-xs-1"></div>
+					                <span class="col-xs-9 label label-primary" style="font-size:15px" id="selAvl"></span>
+						        <div class="col-xs-2"></div>
+						        </div>
+						        <div class="row"></div>
+					        </div>
+							
+					        <div th:if="${tokenRequest.status == 'V'}" class="form-group">
+					            <div class="row">
+					            <div class="col-sm-4"></div>
+						        <div class="col-sm-3">
+							        <button type="submit" class="btn btn-danger btn-block" onclick="return validateForm()">Schedule Appointment</button>
 						        </div>
 						        <div class="col-sm-5"></div>
 						        </div>
@@ -363,10 +429,9 @@ function displayChooseDateorNot() {
 					       <div th:if="${message}" class="form-group">
 					            <div class="row">
 					            <div class="col-xs-1"></div>
-					                <span class="col-xs-10 label label-success" th:text="${msg}" style="font-size:20px"></span>
-						        <div class="col-xs-1"></div>
+					                <span class="col-xs-9 label label-primary" th:text="${msg}" style="font-size:15px"></span>
+						        <div class="col-xs-2"></div>
 						        </div>
-						        <div class="row"></div>
 						        <div class="row"></div>
 					        </div>
 					    
@@ -378,8 +443,62 @@ function displayChooseDateorNot() {
 		
 	</div>
 	<div style="clear:both">
-	<p class="footer">Copyright © 2017 [KDMSL] All Rights Reserved</p>
+	<p class="footer">Copyright &copy; 2017 [KDMSL] All Rights Reserved</p>
 	</div>
+	<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+	function selectDate(rid,rdate,ravtoken,rmxtoken,rtimeslot,rpeccode,datetoken) {
+		
+    	document.getElementById("rid").value = rid;
+		document.getElementById("rdate").value = rdate;
+		document.getElementById("ravtoken").value = ravtoken;
+		document.getElementById("rmxtoken").value = rmxtoken;
+		document.getElementById("rtimeslot").value = rtimeslot;
+		document.getElementById("rpeccode").value = rpeccode;
+		document.getElementById('displayText').innerHTML = "Selected Date Availability - Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken;
+		document.getElementById('selAvl').innerHTML = "Selected Date Availability - Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken;
+		/* document.getElementById('displayText').value = "Current Availability- Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken; */
+		
+		for(var i = 0; i < 15; i++){
+			if(i==rid)
+				{
+		document.getElementById(rid).style.color = "white";
+		document.getElementById(rid).style.backgroundColor = "#428bca";
+				}
+			else{
+		document.getElementById(i).style.color = "black";
+		document.getElementById(i).style.backgroundColor = "white";
+				
+			}
+		
+		}
+		
+		<!-- var nextdatetokens= /*[[${rowdates}]]*/; -->
+		
+		/* document.getElementById("rpeccode").value = rpeccode;
+		
+        for(var i = 0; i < 5; i++){
+    		var currentbranchDateTokens = nextdatetokens[i];
+            for(var j = 0; j < 3; j++){   
+            	
+            var item = nextdatetokens[i].branchDateTokens[j];
+            alert(item.id+" "+item.selected);
+            if(item.id == rid){
+            	
+                item.selected = !item.selected;
+                
+            }else {
+            	item.selected = false;
+            }
+            
+    	}
+        }  */
+        
+        
+        
+	}
+	/*]]>*/
+	</script>
 </body>
 </html>	
 	

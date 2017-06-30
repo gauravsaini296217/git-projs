@@ -1,6 +1,6 @@
 .loginpanelspace{
 	
-	margin-top: 5%;
+	margin-top: 2%;
 }
 
 
@@ -9,3 +9,12 @@ div .ppanel {
 	box-shadow:0 0 0.3cm rgba(0,0,0,0.5);
 }
     
+#selectedClass{
+	
+	border: 1px solid #428bca;
+}
+
+#baseClass{
+	
+	border: 1px solid black;
+}

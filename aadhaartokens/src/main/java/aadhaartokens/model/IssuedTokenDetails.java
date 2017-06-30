@@ -83,6 +83,14 @@ public class IssuedTokenDetails {
 	public void setPeccenter(String peccenter) {
 		this.peccenter = peccenter;
 	}
+
+	@Override
+	public String toString() {
+		return "IssuedTokenDetails [tokenno=" + tokenno + ", name=" + name + ", mobile=" + mobile + ", email=" + email
+				+ ", aadhaar=" + aadhaar + ", enrolmenttype=" + enrolmenttype + ", peccenter=" + peccenter + ", status="
+				+ status + ", date=" + date + ", time=" + time + "]";
+	}
+	
 	
 	
 }

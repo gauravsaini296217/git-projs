@@ -433,7 +433,7 @@ public class AadhaarUtility {
     		cstmt.setInt("Otp", Integer.parseInt(tokenRequest.getOtp()));
     		cstmt.setString("OtpTime", String.valueOf(tokenRequest.getTime()));
     		
-    		System.out.println("call InsTokenDetailsNew("+String.valueOf(tokenRequest.getState())+","+String.valueOf(tokenRequest.getDistrict())+","+String.valueOf(tokenRequest.getRpeccode())+","+String.valueOf(tokenRequest.getEnroltype())+","+String.valueOf(tokenRequest.getName())+","+String.valueOf(tokenRequest.getMobile())+","+String.valueOf(tokenRequest.getEmail())+","+String.valueOf(tokenRequest.getAadhaar())+","+String.valueOf(tokenRequest.getRdate())+")");
+    		System.out.println("call InsTokenDetailsNew("+String.valueOf(tokenRequest.getState())+","+String.valueOf(tokenRequest.getDistrict())+","+String.valueOf(tokenRequest.getRpeccode())+","+String.valueOf(tokenRequest.getEnroltype())+","+String.valueOf(tokenRequest.getName())+","+String.valueOf(tokenRequest.getMobile())+","+String.valueOf(tokenRequest.getEmail())+","+String.valueOf(tokenRequest.getAadhaar())+","+String.valueOf(tokenRequest.getRdate())+","+String.valueOf(tokenRequest.getOtp())+","+String.valueOf(tokenRequest.getTime())+")");
     		
             boolean results = cstmt.execute();
             int rowsAffected = 0;
@@ -451,6 +451,7 @@ public class AadhaarUtility {
             
             while (rs.next()) {
             	
+            	System.out.println("Token Status:"+rs.getString("Status"));
             	
             	issuedTokenDetails.setTokenno(rs.getString("TokenID"));
             	issuedTokenDetails.setName(tokenRequest.getName());

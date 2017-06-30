@@ -51,6 +51,15 @@ public class TokenService {
 	
 	AadhaarUtility aadhaarUtility=new AadhaarUtility();
 	
+	@RequestMapping(value="/error", method={RequestMethod.GET})
+	public ModelAndView getError()
+	{
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.setViewName("error");
+		return modelAndView;
+		
+	}
+	
 	@RequestMapping(value="/", method={RequestMethod.GET})
 	public ModelAndView getToken()
 	{
@@ -79,6 +88,7 @@ public class TokenService {
 		modelAndView.addObject("tokenRequest", tokenRequest);
 		modelAndView.addObject("message", false);
 		modelAndView.addObject("msg", "");
+		modelAndView.addObject("disable",false);
 		modelAndView.setViewName("gettoken");
 		return modelAndView;
 		
@@ -118,6 +128,7 @@ public class TokenService {
     		modelAndView.addObject("tokenRequest", tokenRequest);
     		modelAndView.addObject("message", false);
     		modelAndView.addObject("msg", "");
+    		modelAndView.addObject("disable",false);
     		modelAndView.setViewName("gettoken");
     		return modelAndView;
     		
@@ -138,6 +149,7 @@ public class TokenService {
 		modelAndView.addObject("tokenRequest", tokenRequest);
 		modelAndView.addObject("message", true);
 		modelAndView.addObject("msg", "OTP Sent to Mobile");
+		modelAndView.addObject("disable",true);
 		modelAndView.setViewName("gettoken");
 		return modelAndView;
 		
@@ -158,6 +170,7 @@ public class TokenService {
     		modelAndView.addObject("tokenRequest", tokenRequest);
     		modelAndView.addObject("message", true);
     		modelAndView.addObject("msg", "OTP Successfully Validated");
+    		modelAndView.addObject("disable",true);
     		modelAndView.setViewName("gettoken");
     		return modelAndView;
     		
@@ -175,6 +188,7 @@ public class TokenService {
         		modelAndView.addObject("tokenRequest", tokenRequest);
         		modelAndView.addObject("message", true);
         		modelAndView.addObject("msg", "Wrong OTP entered");
+        		modelAndView.addObject("disable",true);
         		modelAndView.setViewName("gettoken");
         		return modelAndView;
         		
@@ -183,7 +197,7 @@ public class TokenService {
 			
 		}
 
-		if(tokenRequest.getEmail()==null || tokenRequest.getEmail().equalsIgnoreCase(""))
+		/*if(tokenRequest.getEmail()==null || tokenRequest.getEmail().equalsIgnoreCase(""))
 		{	
 		result.rejectValue("email", "error.tokenservice","Email is mandatory");
 		
@@ -200,7 +214,7 @@ public class TokenService {
 		modelAndView.setViewName("gettoken");
 		return modelAndView;
 		
-		}
+		}*/
 		
 		
 		System.out.println("EntryType:"+tokenRequest.getEntrytype());
@@ -224,10 +238,43 @@ public class TokenService {
 					modelAndView.addObject("tokenRequest", tokenRequest);
 					modelAndView.addObject("message", true);
 					modelAndView.addObject("msg", "Aadhaar is Mandatory If it is Updation Case");
+					modelAndView.addObject("disable",true);
 					modelAndView.setViewName("gettoken");
 					return modelAndView;
 					
 				}
+				else{
+					
+					IssuedTokenDetails issuedTokenDetails=new IssuedTokenDetails();
+					try
+			        {
+						BranchDateToken branchDateToken=aadhaarUtility.getDateToken(Integer.parseInt(tokenRequest.getRid()), tokenRequest.getRpeccode(), tokenRequest.getRdate());
+						
+						tokenRequest.setRid(String.valueOf(branchDateToken.getId()));
+						tokenRequest.setRdate(branchDateToken.getDate());
+						tokenRequest.setRavtoken(String.valueOf(branchDateToken.getAvailabletokenno()));
+						tokenRequest.setRmxtoken(String.valueOf(branchDateToken.getMaxtokens()));
+						tokenRequest.setRtimeslot(branchDateToken.getTimeslot());
+						tokenRequest.setRpeccode(branchDateToken.getPeccode());
+						
+						
+						System.out.println("tokenRequest:"+tokenRequest.toString());
+			    
+						issuedTokenDetails=aadhaarUtility.issueToken(tokenRequest);
+					
+			        }catch(Exception e)
+			        {
+			        
+			        	e.printStackTrace();
+			        	
+			        }
+					
+					
+					return new ModelAndView("pdfView","issuedTokenDetails", issuedTokenDetails);
+					
+					
+				}
+				
 				
 			}
 			else if(tokenRequest.getRid()==null || tokenRequest.getRid().equalsIgnoreCase(""))
@@ -244,6 +291,7 @@ public class TokenService {
 				modelAndView.addObject("rowdates", rowDates);
 				modelAndView.addObject("message", true);
 				modelAndView.addObject("msg", "Choose Appointment Date");
+				modelAndView.addObject("disable",true);
 				modelAndView.setViewName("gettoken");
 				return modelAndView;
 				
@@ -290,8 +338,8 @@ public class TokenService {
 		modelAndView.addObject("enrolmenttypes", enrolmentTypeList);
 		modelAndView.addObject("entrytypes", entryTypeList);
 		modelAndView.addObject("tokenRequest", tokenRequest);
-		modelAndView.addObject("message", false);
-		modelAndView.addObject("msg", "");
+		modelAndView.addObject("message", true);
+		modelAndView.addObject("msg", "Full information Functionality is under development");
 		modelAndView.setViewName("gettoken");
 		return modelAndView;
 		
