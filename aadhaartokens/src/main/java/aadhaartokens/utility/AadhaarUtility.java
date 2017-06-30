@@ -451,39 +451,38 @@ public class AadhaarUtility {
             
             while (rs.next()) {
             	
-            	System.out.println("Token Status:"+rs.getString("Status"));
-            	
             	issuedTokenDetails.setTokenno(rs.getString("TokenID"));
             	issuedTokenDetails.setName(tokenRequest.getName());
             	issuedTokenDetails.setMobile(tokenRequest.getMobile());
-            	issuedTokenDetails.setEmail(tokenRequest.getEmail());
-            	if(tokenRequest.getAadhaar()==null)
+            	issuedTokenDetails.setEmail(rs.getString("Email"));
+            	if(rs.getString("Aadhaar")==null || rs.getString("Aadhaar")=="")
             	{
             		issuedTokenDetails.setAadhaar("");
             	}
             	else{
-            	issuedTokenDetails.setAadhaar(tokenRequest.getAadhaar());
+            	issuedTokenDetails.setAadhaar(rs.getString("Aadhaar"));
             	}
-            	if(tokenRequest.getEnroltype().equalsIgnoreCase("1"))
+            	if(rs.getString("EType").equalsIgnoreCase("NEW"))
             	{
             		issuedTokenDetails.setEnrolmenttype("New");	
             		
             	}
-            	else if(tokenRequest.getEnroltype().equalsIgnoreCase("2"))
+            	else if(rs.getString("EType").equalsIgnoreCase("Demographic Updation"))
             	{
             		issuedTokenDetails.setEnrolmenttype("Demographic");	
             		
             	}
-            	else if(tokenRequest.getEnroltype().equalsIgnoreCase("3"))
+            	else if(rs.getString("EType").equalsIgnoreCase("Biometric Updation"))
             	{
             		issuedTokenDetails.setEnrolmenttype("Biometric");	
             		
             	}
             	
-            	issuedTokenDetails.setPeccenter(Capitalize(rs.getString("PecName")));
             	issuedTokenDetails.setStatus(rs.getString("Status"));
-            	issuedTokenDetails.setDate(tokenRequest.getRdate());
+            	issuedTokenDetails.setDate(rs.getString("Date"));
             	issuedTokenDetails.setTime(rs.getString("Time"));
+            	issuedTokenDetails.setPeccenter(Capitalize(rs.getString("PecName")));
+            	
             	
             }
 			
@@ -499,6 +498,7 @@ public class AadhaarUtility {
 	{
 		String capname="";
 		String[] pecnames=pecname.split(" ");
+		System.out.println("pecnames length:"+pecnames.length);
 		
 		for(int i=0;i<pecnames.length;i++)
 		{
@@ -507,7 +507,10 @@ public class AadhaarUtility {
 			capname=capname+pecnames[i].substring(0, 1).toUpperCase() + pecnames[i].substring(1).toLowerCase();
 			}
 			else{
+			if(!pecnames[i].toString().equalsIgnoreCase(""))	
+			{
 			capname=capname+pecnames[i].substring(0, 1).toUpperCase() + pecnames[i].substring(1).toLowerCase()+" ";
+			}
 			}
 		}
 		

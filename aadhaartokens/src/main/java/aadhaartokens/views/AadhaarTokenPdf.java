@@ -350,7 +350,12 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
         table.writeSelectedRows(0, -1, 20f, 370f, canvas);
         /*document.add(table);*/
         
-        
+        if(issuedTokenDetails.getStatus().equalsIgnoreCase("Token Already Generated"))
+        {
+        	
+        	ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Previous Appointment Cancelled", gendate ),200, 60,0);
+        	
+        }
         ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Appointment Generation Date : "+dateFormat.format(new Date()), gendate ),110, 50,0);
         ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Please bring filled Enrolment form along with Org POI , POA & DOB Proofs.", content ),10, 40,0);
         ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("One Xerox copy of all the Original documents is required.", content ),10, 25,0);
@@ -387,6 +392,13 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
 	
 		String msg="Dear "+issuedTokenDetails.getName()+", Your appointment for Aadhaar "+nu+" is confirmed on "+issuedTokenDetails.getDate().substring(8,10)+"/"+issuedTokenDetails.getDate().substring(5,7)+"/"+issuedTokenDetails.getDate().substring(0,4)+" at "+issuedTokenDetails.getPeccenter()+" between "+issuedTokenDetails.getTime()+". Your appointment no is "+issuedTokenDetails.getTokenno()+". Please report 15 mins before and carry your Original Proofs towards Identity(POI), Address(POA) and Date of Birth(DOB) with one xerox copy of each." + " Once your Aadhaar number is generated, you can avail Aadhaar PVC card across the counter at our office.";
 	//	String msg="Dear "+issuedTokenDetails.getName()+", Your appointment is fixed for Aadhaar "+nu+" at "+issuedTokenDetails.getPeccenter()+" on "+issuedTokenDetails.getDate()+" between "+issuedTokenDetails.getTime()+". Your token no is "+issuedTokenDetails.getTokenno()+". Please report 15 mins before and carry your Original POI, POA and DOB proofs with one xerox copy of each." + " Once your Aadhaar number is generated, you can as well avail Aadhaar PVC card across the counter at our office.";
+		
+		if(issuedTokenDetails.getStatus().equalsIgnoreCase("Token Already Generated"))
+        {
+        	
+          msg=msg+"Your Previous Appointment has been cancelled.";
+        	
+        }
 		
 //		System.out.println(msg);
 		
@@ -461,6 +473,12 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
 		        
 		    		email.append("<p> "+msg1+"</p>");
 		            email.append("<br>");
+		            if(issuedTokenDetails.getStatus().equalsIgnoreCase("Token Already Generated"))
+		            {
+		            	
+		            	email.append("<p>Your Previous Appointment has been cancelled.</p>");
+		            	
+		            }
 		            email.append("<p>Note:- Please do not reply, It is system generated mail.</p>");
 		        email.append("<br><br><br><br>");
 		        email.append("<p>Regards,</p>");
