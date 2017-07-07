@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Aadhaar Online Appointment Service</title>
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+	
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+  	<link rel="stylesheet" href="/resources/demos/style.css" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
+	<link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+	<link rel="stylesheet" href="assets/custom/css/flexslider.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="assets/custom/css/parallax-slider.css" type="text/css"/>
+	<link rel="stylesheet" href="assets/font-awesome-4.0.3/css/font-awesome.min.css" type="text/css"/>
+	<link href="assets/custom/css/business-plate.css" rel="stylesheet"/>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="assets/custom/js/jquery-1.8.2.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>    	
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+	$(function() { showVertype(); });
+	$(function() { showAge(); });
+	$(function() { document.getElementById('guardianS').style.display = 'none';
+	document.getElementById('guardianS1').style.display = 'none';
+	});
+	
+	function numeric(event)
+	{
+		
+		return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode==8);	
+
+	}
+
+	function numeric1(event)
+	{
+		
+		return (event.charCode >= 47 && event.charCode <= 57) || (event.charCode==8);	
+
+	}
+	
+	function alpha(e) {
+		var k;
+		document.all ? k=e.keyCode : k=e.which;
+		return ((k>64 && k<91) || (k>96 && k<123) || k==8 || k==32);
+	}
+
+	function mail(e) {
+		var m;
+		document.all ? m=e.keyCode : m=e.which;
+		return ((m>=64 && m<=90) || (m>96 && m<123) || (m>=48 && m<=57) || m==45 || m==46 || m==8 || m==95);
+	}
+	
+	function address(e) {
+		var m;
+		document.all ? m=e.keyCode : m=e.which;
+		return ((m>=65 && m<=90) || (m>96 && m<123) || (m>=44 && m<=58) || m==40 || m==41 || m==35 || m==8  || m==95 || m==32 || m==38);
+}
+
+	
+	$(function() { displayAadhaarorNot(); });
+
+    function getStateMaster() {
+    	
+    	
+    	
+    	var pin = document.getElementById('pin').value;
+    	if(pin.length==6)
+    	{
+    		
+    		document.getElementById("ApplicationDetail").submit();
+    		
+    	}
+    	
+    }
+    
+    function showAge() {
+    	
+    	
+    	var agetype=document.getElementById("ageType");
+    	var agetypeData=agetype.options[agetype.selectedIndex].value;
+    	if(agetypeData=="DOB")
+    	{
+    		
+        	document.getElementById('dobS').style.display = 'block';
+    		document.getElementById('ageS').style.display = 'none';
+    		
+    	}
+    	else if(agetypeData=="Age"){
+    		
+    		document.getElementById('dobS').style.display = 'none';
+    		document.getElementById('ageS').style.display = 'block';
+    	}
+        
+    }
+    
+    function showVertype() {
+    	
+    	
+    	var vertype=document.getElementById("vertype");
+    	var vertypeData=vertype.options[vertype.selectedIndex].value;
+    	if(vertypeData=="DocumentBased")
+    	{
+    		
+        	document.getElementById('docRow').style.display = 'block';
+    		document.getElementById('docRow1').style.display = 'block';
+    		document.getElementById('docRow2').style.display = 'block';
+    		document.getElementById('docRow3').style.display = 'block';
+    		document.getElementById('hofRow').style.display = 'none';
+    		document.getElementById('hofRow1').style.display = 'none';
+    		document.getElementById('hofRow2').style.display = 'none';
+    	}
+    	else if(vertypeData=="HeadofFamily"){
+    		
+    		document.getElementById('docRow').style.display = 'none';
+    		document.getElementById('docRow1').style.display = 'none';
+    		document.getElementById('docRow2').style.display = 'none';
+    		document.getElementById('docRow3').style.display = 'none';
+    		document.getElementById('hofRow').style.display = 'block';
+    		document.getElementById('hofRow1').style.display = 'block';
+    		document.getElementById('hofRow2').style.display = 'block';
+    	}
+        
+    }
+		
+    function displayAadhaarorNot() {
+    	
+    	var enroltype= /*[[${enrolmtype}]]*/;
+    	
+    	if(enroltype!='1')
+    	{
+    	
+    		document.getElementById('aadhaarR').style.display = 'block';
+    		document.getElementById('aadhaarR1').style.display = 'block';
+    		
+    	}
+    	else{
+    		
+    		document.getElementById('aadhaarR').style.display = 'none';
+    		document.getElementById('aadhaarR1').style.display = 'none';
+    	}
+    	
+    }	
+    
+    
+    function checkAge()
+	{
+		var dage = document.getElementById('age').value;
+        
+        if(dage>=0 && dage<=100)
+        	{
+        	
+        var	age=dage;	
+            if(age<=5)
+        	{
+            document.getElementById('guardianS').style.display = 'block';
+            document.getElementById('guardianS1').style.display = 'block';
+        	}
+            else{
+            document.getElementById('guardianS').style.display = 'none';
+            document.getElementById('guardianS1').style.display = 'none';
+        	}
+        	
+        	}
+        
+	}
+    
+    function checkDob() {
+		
+    	
+        var ddob = document.getElementById('dob');
+        var dage = document.getElementById('age');
+        
+        var doby = /^[0-3]{1}[0-9]{1}\/[0-1]{1}[0-9]{1}\/[0-9]{4}$/;
+		
+		if(ddob.value.length==10)
+		{
+		
+		if(doby.test(ddob.value)==false)
+		{
+			alert("Please provide the valid Date");
+			ddob.value='';
+            ddob.focus();
+		}
+		else{
+			
+			var age;
+			
+			
+        	var date=new Date();
+        	
+        	var dd=date.getDate();
+        	var mm=date.getMonth()+1;
+        	var yy=date.getFullYear();
+        	
+        	var ddate = ddob.value.split("/");
+        	if(ddate.length==3)
+            {
+        		age = yy - ddate[2];
+
+                if ( mm < ddate[1])
+                {
+                    age--;
+                }
+                if ((ddate[1] == mm) && (dd < ddate[0]))
+                {
+                    age--;
+                }
+                
+                dage.value=age;
+            
+                if(age<=5)
+            	{
+                document.getElementById('guardianS').style.display = 'block';
+                document.getElementById('guardianS1').style.display = 'block';
+            	}
+                else{
+                document.getElementById('guardianS').style.display = 'none';
+                document.getElementById('guardianS1').style.display = 'none';
+            	}
+               
+            }
+        	
+        	
+		}
+		}
+		
+    }
+	
+    function validateForm() {
+    	
+    	
+    	var agetype=document.getElementById("ageType");
+    	var agetypeData=agetype.options[agetype.selectedIndex].value;
+    	if(agetypeData=='DOB')
+    		{
+    		
+    		if(document.getElementById('dob').value=='')
+    			{
+    			
+    			alert("If AgeType is 'DOB' then Dob is mandatory");
+    			return false;
+    			
+    			}
+    		else{
+    			if(document.getElementById('age').value<=5)
+    			{
+    			
+    				if(document.getElementById('dgname').value==''  || document.getElementById('dgaadhaar').value=='')
+    				{
+    					
+    					alert("If Age<=5 Then GuardianType, Guardian Name & Guardian Aadhaar all are mandatory");
+    	    			return false;
+    					
+    					
+    				}
+    			}
+    			
+    		}
+    		
+    		}
+    	
+    	else if(agetypeData=='Age')
+		{
+		
+		if(document.getElementById('age').value=='')
+			{
+			
+			alert("If AgeType is 'Age' then Age is mandatory");
+			return false;
+			
+			}
+		else{
+			if(document.getElementById('age').value<=5)
+			{
+			
+				if(document.getElementById('dgname').value==''  || document.getElementById('dgaadhaar').value=='')
+				{
+					
+					alert("If Age<=5 Then GuardianType, Guardian Name & Guardian Aadhaar all are mandatory");
+	    			return false;
+					
+					
+				}
+			}
+			
+		}
+		
+		}
+    	
+    	var pin=document.getElementById("pin").value;
+    	
+    	if(pin=='')
+    	{
+    	alert("Please provide Pincode");
+    	return false;
+    	}
+    	
+    	var vertype=document.getElementById("vertype");
+    	var vertypeData=vertype.options[vertype.selectedIndex].value;
+    	if(vertypeData=="HeadofFamily"){
+    		
+    		if(document.getElementById('hofname').value=='' || document.getElementById('hofaadhaar').value=='')
+    		{
+    			alert("If Verification Type is HeadofFamily then Hof Name & Hof Aadhaar are mandatory");
+    			return false;
+    		}
+    	}
+    	
+    	
+    	var rdate=document.getElementById("rdate").value;
+    	var rtimeslot=document.getElementById("rtimeslot").value;
+    	
+    	
+    	if(rdate=='')
+    	{
+    	alert("Choose Appointment Date");
+    	return false;
+    	}
+    	
+    	
+    	var confrm= /*[[${confrm}]]*/;
+    	
+    	if(confirm("Your Selected Appointment is [ Date-"+rdate+", Timeslot-"+rtimeslot+" ].\n"+confrm+"Do you want to continue?"))
+    	{
+        $("#ApplicationDetail").attr('target', '_blank');	
+    	setTimeout(function(){ window.location.href = 'http://203.176.156.222:8080/aadhaartokens/'; }, 5000); 
+    	return true;
+    	
+    	}
+    else{
+    	return false;	
+    	
+    }
+    	
+    }
+    
+	
+	/*]]>*/	
+	</script>
+</head>
+<script type="text/javascript">
+</script>
+
+<body>
+    <div class="header">
+      <div class="row">
+         <!-- <div class="col-sm-1" style="background-color: MidnightBlue;"></div> -->
+         <div class="col-sm-3" style="background-color: MidnightBlue;padding-top:4px;padding-bottom:9px;padding-left:20px">
+	     <h2 style="padding-top:4px;padding-bottom:4px;padding-left:20px"><span><img th:src="@{/images/aadhaarlogo.png}"/></span></h2>
+	     </div>
+	     <div class="col-sm-7" style="background-color: MidnightBlue;">
+	     <h2>Aadhaar Online Appointment Service <span class="label label-info badgefont">[Resident Portal]</span></h2>
+	     </div>
+	     <div class="col-sm-2" style="background-color: MidnightBlue;padding:12px">
+	     <h2 style="padding:4px"><span style="background-color: white;padding-top:1px;padding-bottom:3px;padding-left:2px;padding-right:2px"><img th:src="@{/images/karvygrouplogo.png}"/></span></h2>
+	     </div>
+	</div>
+	</div>
+	<div class="container font">
+	    <div class="row loginpanelspace">
+		    <div class="col-md-8 col-md-offset-2">
+		        <div class="login-panel panel panel-primary ppanel">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Application Form</h3>                        
+                    </div>
+                    <div class="panel-body">
+            <form autocomplete="off" action="#" th:action="@{/enrolmentform}" th:object="${enrolmentDetails}" method="post" class="form-horizontal" role="form" id="ApplicationDetail">
+			<br></br>
+			<div class="form-group">
+			<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<strong>Name</strong>
+				</div>		
+				<div class="col-sm-6">
+				<strong>Enrolment Type</strong>	
+                </div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<input type="text" th:field="*{name}" placeholder="Resident Name"
+								           class="form-control" th:readonly="true"/> 
+			    <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+								           class="validation-message"></label>
+				</div>		
+				<div class="col-sm-6">
+				<input type="text" th:field="*{enroltype}" placeholder="Enrolment type"
+								           class="form-control" th:readonly="true"/> 
+			    <label th:if="${#fields.hasErrors('enroltype')}" th:errors="*{enroltype}"
+								           class="validation-message"></label>
+                </div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<div class="row" id="aadhaarR">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<strong>Aadhaar No</strong>
+				</div>		
+				<div class="col-sm-6">
+				</div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<div class="row"  id="aadhaarR1">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<input type="text" th:field="*{aadhaarno}" placeholder="aadhaarno"
+								           class="form-control" th:readonly="true"/> 
+			    <label th:if="${#fields.hasErrors('aadhaarno')}" th:errors="*{aadhaarno}"
+								           class="validation-message"></label>
+				</div>		
+				<div class="col-sm-6">
+				</div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			
+			<p></p>
+			<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<strong>Gender</strong>
+				</div>		
+				<div class="col-sm-6">
+				<select class="form-control" th:field="*{gender}"  id="gender">
+                                       <option th:value="Male" th:text="Male"></option>
+                                       <option th:value="Female" th:text="Female"></option>
+                                       <option th:value="Transgender" th:text="Transgender"></option>
+                </select>	
+                </div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<p></p>
+			<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			    <div class="row">
+			    <div class="col-sm-6">
+				<strong>AgeType</strong>
+				</div>		
+				<div class="col-sm-6">
+				<select class="form-control"  name="ageType" id="ageType" onChange="showAge()">
+                                       <option th:value="DOB" th:text="DOB"></option>
+                                       <option th:value="Age" th:text="Age"></option>
+                </select>	
+                </div>
+                </div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<p></p>
+			<div class="row" id="dobS">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			<div class="row">
+			<div class="col-sm-6">
+			<strong>Date of Birth:</strong>
+			</div>
+			<div class="col-sm-6">
+			<input type="text" th:field="*{dob}" placeholder="DD/MM/YYYY"
+								           class="form-control" onkeyup="checkDob()" onkeypress="return numeric1(event)"/> 
+			<label th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"
+								           class="validation-message"></label>
+			</div>					           
+			</div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			
+			<div class="row" id="ageS">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			<div class="row">
+			<div class="col-sm-6">
+			<strong>Age:</strong>
+			</div>
+			<div class="col-sm-6">
+			<input type="text" th:field="*{age}" placeholder="Age"
+								           class="form-control" onkeyup="checkAge()"  onkeypress="return numeric(event)"/> 
+			<label th:if="${#fields.hasErrors('age')}" th:errors="*{age}"
+								           class="validation-message"></label>
+			</div>					           
+			</div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<br/>
+			<div class="row" id="guardianS">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			<div class="row">
+			<div class="col-sm-6">
+			<strong>Guardian:</strong>
+			</div>
+			<div class="col-sm-6">
+			<select class="form-control" th:field="*{dguardian}"  id="dguardian">
+                                       <option th:value="Father" th:text="Father"></option>
+                                       <option th:value="Mother" th:text="Mother"></option>
+                                       <option th:value="Guardian" th:text="Guardian"></option>
+                                       
+            </select>
+			</div>					           
+			</div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			<br/>
+			<div class="row" id="guardianS1">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-10">
+			<div class="row">
+			<div class="col-sm-6">
+			<input type="text" th:field="*{dgname}" id="dgname" placeholder="Guardian Name"
+								           class="form-control" style="text-transform: uppercase" onkeypress="return alpha(event)"/> 
+			<label th:if="${#fields.hasErrors('dgname')}" th:errors="*{dgname}"
+								           class="validation-message"></label>
+			</div>
+			<div class="col-sm-6">
+			<input type="text" th:field="*{dgaadhaar}" id="dgaadhaar" placeholder="Guardian Aadhaar"
+								           class="form-control" onkeypress="return numeric(event)"/> 
+			<label th:if="${#fields.hasErrors('dgaadhaar')}" th:errors="*{dgaadhaar}"
+								           class="validation-message"></label>
+			</div>					           
+			</div>
+			</div>
+			<div class="col-sm-1"></div>
+			</div>
+			
+			
+			<h4 style="padding-left:1em">Resident Address</h4>
+			<div class="row">
+			<div class="col-sm-1"></div>
+			<div class="col-sm-3">
+			<strong>Guardian/Parent/Spouse Name </strong>
+			</div>
+			<div class="col-sm-2">
+			<select class="form-control" th:field="*{co}"  id="co">
+                                       <option th:value="CO" th:text="CO"></option>
+                                       <option th:value="SO" th:text="SO"></option>
+                                       <option th:value="DO" th:text="DO"></option>
+                                       <option th:value="WO" th:text="WO"></option>
+            </select>
+			</div>
+			<div class="col-sm-3">
+			<input type="text" th:field="*{gname}" id="gname" placeholder="Guardian Name"
+								           class="form-control"  style="text-transform: uppercase" onkeypress="return alpha(event)"/> 
+			<label th:if="${#fields.hasErrors('gname')}" th:errors="*{gname}"
+								           class="validation-message"></label>
+			</div>
+			</div>
+			<p></p>
+			<div class="row">
+				<div class="col-sm-1"></div>
+					<div class="col-sm-10">
+					    <div class="row">
+				        <div class="col-sm-6">
+						<strong>House/Bldg./Apt.:</strong>
+						</div>
+						<div class="col-sm-6">
+						<input type="text" th:field="*{hno}" id="hno" placeholder="House No"
+								           class="form-control" style="text-transform: uppercase"  onkeypress="return address(event)"/> 
+			            <label th:if="${#fields.hasErrors('hno')}" th:errors="*{hno}"
+								           class="validation-message"></label>
+						</div>
+						</div>		           
+					</div>
+					
+			</div>
+			<p></p>					
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Street/Road/Lane:</strong>
+					</div>
+					<div class="col-sm-6">
+					<input type="text" th:field="*{streetno}" id="streetno" placeholder="Street No"
+								           class="form-control"  style="text-transform: uppercase"   onkeypress="return address(event)"/> 
+			        <label th:if="${#fields.hasErrors('streetno')}" th:errors="*{streetno}"
+								           class="validation-message"></label>
+					</div>			           
+					</div>			           
+				</div>
+				<div class="col-sm-1"></div>
+				
+			</div>
+			<p></p>					
+			<div class="row">
+			    <div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Landmark:</strong>
+					</div>
+					<div class="col-sm-6">
+					<input type="text" th:field="*{lmark}" id="lmark" placeholder="Landmark"
+								           class="form-control"  style="text-transform: uppercase"  onkeypress="return address(event)"/> 
+			        <label th:if="${#fields.hasErrors('lmark')}" th:errors="*{lmark}"
+								           class="validation-message"></label>
+					</div>			           
+					</div>			           
+				</div>
+				<div class="col-sm-1"></div>
+			</div>
+			<p></p>					
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Area / Locality:</strong>
+					</div>
+					<div class="col-sm-6">
+					<input type="text" th:field="*{area}" id="area" placeholder="Area / Locality"
+								           class="form-control"  style="text-transform: uppercase"  onkeypress="return address(event)"/> 
+			        <label th:if="${#fields.hasErrors('area')}" th:errors="*{area}"
+								           class="validation-message"></label>
+					</div>			           
+					</div>			           
+				</div>
+				<div class="col-sm-1"></div>
+			</div>
+			<p></p>					
+			<div class="row">
+			    <div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Pin Code:</strong>
+					</div>
+					<div class="col-sm-3">
+					<input type="text" th:field="*{pin}" id="pin" placeholder="Pincode"
+								           class="form-control" onkeyup="getStateMaster()" onkeypress='return numeric(event)'/> 
+			        <label th:if="${#fields.hasErrors('pin')}" th:errors="*{pin}"
+								           class="validation-message"></label>
+					</div>
+					</div>			           
+				</div>
+				<div class="col-sm-1"></div>
+					
+			</div>
+			<p></p>
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="col-sm-6">
+					<strong>Village / Town:</strong>
+					</div>
+					<div class="col-sm-6">
+					    <select class="form-control" th:field="*{vill}" id="vill">
+                                       <option th:each="vl : ${vills}" th:value="${vl.name}" th:text="${vl.name}"></option>
+                        </select>
+                    </div>
+				</div>
+				<div class="col-sm-1"></div>
+				
+			</div>
+			<p></p>
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="col-sm-6">
+					<strong>District:</strong>
+					</div>
+					<div class="col-sm-6">
+					    <select class="form-control" th:field="*{dist}" id="dist">
+                                       <option th:each="dt : ${dists}" th:value="${dt.name}" th:text="${dt.name}"></option>
+                        </select>
+                    </div>
+				</div>
+				<div class="col-sm-1"></div>
+			</div>
+			<p></p>
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="col-sm-6">
+					<strong>Post Office:</strong>
+					</div>
+					<div class="col-sm-6">
+					    <select class="form-control" th:field="*{post}" id="post">
+                                       <option th:each="pt : ${posts}" th:value="${pt.name}" th:text="${pt.name}"></option>
+                        </select>
+                    </div>
+				</div>
+				<div class="col-sm-1"></div>
+			</div>	
+			<p></p>
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="col-sm-6">
+					<strong>State:</strong>
+					</div>
+					<div class="col-sm-6">
+					    <select class="form-control" th:field="*{state}" id="state">
+                                       <option th:each="st : ${states}" th:value="${st.name}" th:text="${st.name}"></option>
+                        </select>
+                    </div>
+				</div>
+				<div class="col-sm-1"></div>
+			</div>
+			</div>
+			<h4>Contact Details</h4>
+			<p></p>					
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-2">
+					<strong>Mobile No:</strong>
+				</div>
+				<div class="col-sm-2">
+				<input type="text" th:field="*{mobile}" id="mobile" placeholder="Mobile" th:readonly="true"
+								           class="form-control"/> 
+			        <label th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}" class="validation-message"></label>
+				</div>
+				<div class="col-sm-1"></div>
+				<div class="col-sm-2">
+				<strong>Email ID:</strong>
+				</div>
+				<div class="col-sm-3">
+				<input type="text" th:field="*{email}" id="email" placeholder="Email"
+								           class="form-control"  style="text-transform: uppercase" onkeypress="return mail(event)"/> 
+			        <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+				</div>
+			</div>
+			<h4>Document Details</h4>
+			<p></p>					
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Verification Type:</strong>
+					</div>
+					<div class="col-sm-6">
+					<select class="form-control" th:field="*{vertype}"  id="vertype" onChange="showVertype()" >
+                                       <option th:value="DocumentBased" th:text="DocumentBased"></option>
+                                       <option th:value="HeadofFamily" th:text="HeadofFamily"></option>
+                    </select>	
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<br/>
+			<div class="row" id="hofRow">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>Head of Family</strong>
+					</div>
+					<div class="col-sm-6">	
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="hofRow1">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<select class="form-control" th:field="*{hof}"  id="hof">
+                                       <option th:value="Father" th:text="Father"></option>
+                                       <option th:value="Mother" th:text="Mother"></option>
+                                       <option th:value="Guardian" th:text="Guardian"></option>
+                                       <option th:value="Husband" th:text="Husband"></option>
+                                       <option th:value="Wife" th:text="Wife"></option>
+                                       
+                    </select>
+					</div>
+					<div class="col-sm-6">	
+					<input type="text" th:field="*{hofname}" id="hofname" placeholder="Hof Name"
+								           class="form-control"/> 
+			        <label th:if="${#fields.hasErrors('hofname')}" th:errors="*{hofname}" class="validation-message"></label>
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="hofRow2">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<input type="text" th:field="*{hofaadhaar}" id="hofaadhaar" placeholder="Hof Aadhaar"
+								           class="form-control"/> 
+			        <label th:if="${#fields.hasErrors('hofaadhaar')}" th:errors="*{hofaadhaar}" class="validation-message"></label>
+                                       
+                    </div>
+					<div class="col-sm-6">	
+					
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="docRow">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>POI</strong>
+					</div>
+					<div class="col-sm-6">
+					<strong>POA</strong>	
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="docRow1">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<select class="form-control" th:field="*{poi}">
+					                   <option th:value="None" th:text="None"></option>
+                                       <option th:each="pi: ${pois}" th:value="${pi.type}" th:text="${pi.type}"></option>
+                    </select>
+					</div>
+					<div class="col-sm-6">
+					<select class="form-control" th:field="*{poa}">
+					                   <option th:value="None" th:text="None"></option>
+                                       <option th:each="pa: ${poas}" th:value="${pa.type}" th:text="${pa.type}"></option>
+                    </select>
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="docRow2">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<strong>DOB</strong>
+					</div>
+					<div class="col-sm-6">
+					<strong>POR</strong>	
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<div class="row" id="docRow3">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10">
+				    <div class="row">
+				    <div class="col-sm-6">
+					<select class="form-control" th:field="*{dobp}">
+					                   <option th:value="None" th:text="None"></option>
+                                       <option th:each="db: ${dobs}" th:value="${db.type}" th:text="${db.type}"></option>
+                    </select>
+					</div>
+					<div class="col-sm-6">
+					<select class="form-control" th:field="*{por}">
+					                   <option th:value="None" th:text="None"></option>
+                                       <option th:each="pr: ${pors}" th:value="${pr.type}" th:text="${pr.type}"></option>
+                    </select>
+					</div>
+				    </div>
+				<div class="col-sm-1"></div>
+			    </div>
+			</div>
+			<br/>
+			<div class="form-group" >
+							    <div class="row">
+							      <div class="col-sm-1"></div>
+							      <div class="col-sm-4" id="choosedate">
+			                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Choose Date</button>
+			                        
+			                        <div id="myModal" class="modal fade" role="dialog">
+                                       <div class="modal-dialog" style="width:70%;">
+
+                                            <!-- Modal content-->
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <div class="row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-2"><h4 class="modal-title">Choose Date</h4></div>
+                                        <div class="col-sm-9"></div>
+                                        </div>
+                                        <div class="row">
+                                        <div class="col-sm-1"></div>
+                                        <div class="col-sm-8"><label id="displayText" style="font-size:20px;color:#5cb85c;text-align: left;"></label></div>
+                                        <div class="col-sm-2"><button type="button" class="btn btn-default btn-primary" data-dismiss="modal">Submit</button></div>
+                                        <div class="col-sm-1"></div>
+                                        </div>
+                                        
+                                        
+                                        </div>
+                                        <div class="modal-body" id="rf">
+                                           <div class="row" th:each="rowdate : ${rowdates}">
+                                             <div class="col-sm-1"></div>
+                                             <div class="col-sm-3" th:style="${datetoken.selected} ? 'border: 2px solid #428bca;' : 'border: 1px solid black;'" th:each="datetoken : ${rowdate.branchDateTokens}" th:onclick="'selectDate(\'' + ${datetoken.id} + '\',\'' + ${datetoken.date} + '\',\'' + ${datetoken.availabletokenno}  + '\',\'' + ${datetoken.maxtokens}  + '\',\'' + ${datetoken.timeslot}  + '\',\'' + ${datetoken.peccode} + '\');'" th:id="${datetoken.id}" >
+                                             <div class="media">
+                                              
+                                              <div class="media-body">
+                                                 <h5 class="media-heading">Available Date:<strong><label th:text="${datetoken.date}"></label></strong></h5>
+                                                  <h5 class="media-heading">Available Time:<strong><label th:text="${datetoken.timeslot}"></label></strong></h5>
+                                                  <h5 class="media-heading">Token Status:</h5>
+                                                 <p style="font-size: 20px;"><strong><label th:text="${datetoken.availabletokenno}+'/'+${datetoken.maxtokens}"></label></strong></p>
+                                              </div>
+                                              </div>
+                                           
+                                             </div>
+                                             <div class="col-sm-1"></div>
+                                           </div>
+                                        </div>
+                                        
+                                        </div>
+
+                                        </div>
+                                     </div>
+                                   </div> 
+                                   
+                                </div>
+                                
+                                <input type="hidden" th:field="*{rid}" class="form-control"/>   
+								<input type="hidden" th:field="*{rdate}" class="form-control"/>          
+                                <input type="hidden" th:field="*{ravtoken}" class="form-control"/>   
+								<input type="hidden" th:field="*{rmxtoken}" class="form-control"/>          
+                                <input type="hidden" th:field="*{rtimeslot}" class="form-control"/>   
+								<input type="hidden" th:field="*{rpeccode}" class="form-control"/>          
+                                      
+                                      
+			                </div>
+			                
+			                <input type="hidden" th:field="*{otp}" class="form-control"/>
+			                <input type="hidden" th:field="*{otptime}" class="form-control"/>
+			                <input type="hidden" th:field="*{sstate}" class="form-control"/>
+			                <input type="hidden" th:field="*{sdistrict}" class="form-control"/>
+			                <input type="hidden" th:field="*{peccode}" class="form-control"/>
+			                
+			                <div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-4"></div>
+						        <div class="col-sm-3">
+							        <button type="submit" class="btn btn-danger btn-block" onclick="return validateForm()">Schedule Appointment</button>
+						        </div>
+						        <div class="col-sm-5"></div>
+						        </div>
+					        </div>
+			
+			</form>      
+						</div>
+							
+		            </div>
+                </div>
+		    </div>
+		</div>
+		
+
+	<div style="clear:both">
+	<p class="footer">Copyright &copy; 2017 [KDMSL] All Rights Reserved</p>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+	function selectDate(rid,rdate,ravtoken,rmxtoken,rtimeslot,rpeccode,datetoken) {
+		
+    	document.getElementById("rid").value = rid;
+		document.getElementById("rdate").value = rdate;
+		document.getElementById("ravtoken").value = ravtoken;
+		document.getElementById("rmxtoken").value = rmxtoken;
+		document.getElementById("rtimeslot").value = rtimeslot;
+		document.getElementById("rpeccode").value = rpeccode;
+		document.getElementById('displayText').innerHTML = "Selected Date Availability - Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken;
+		document.getElementById('selAvl').innerHTML = "Selected Date Availability - Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken;
+		/* document.getElementById('displayText').value = "Current Availability- Date:-"+rdate+" , Time Slot:-"+rtimeslot+" , Token No:-"+ravtoken+"/"+rmxtoken; */
+		
+		for(var i = 0; i < 15; i++){
+			if(i==rid)
+				{
+		document.getElementById(rid).style.color = "white";
+		document.getElementById(rid).style.backgroundColor = "#428bca";
+				}
+			else{
+		document.getElementById(i).style.color = "black";
+		document.getElementById(i).style.backgroundColor = "white";
+				
+			}
+		
+		}
+		
+		<!-- var nextdatetokens= /*[[${rowdates}]]*/; -->
+		
+		/* document.getElementById("rpeccode").value = rpeccode;
+		
+        for(var i = 0; i < 5; i++){
+    		var currentbranchDateTokens = nextdatetokens[i];
+            for(var j = 0; j < 3; j++){   
+            	
+            var item = nextdatetokens[i].branchDateTokens[j];
+            alert(item.id+" "+item.selected);
+            if(item.id == rid){
+            	
+                item.selected = !item.selected;
+                
+            }else {
+            	item.selected = false;
+            }
+            
+    	}
+        }  */
+        
+        
+        
+	}
+	/*]]>*/
+	</script>
+	
+</body>
+</html>	
+	

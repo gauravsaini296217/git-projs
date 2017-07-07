@@ -3,12 +3,14 @@ package aadhaartokens.utility;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,16 +18,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import aadhaartokens.model.BranchDateToken;
 import aadhaartokens.model.CheckOTP;
+import aadhaartokens.model.EnrolmentDetails;
 import aadhaartokens.model.IssuedTokenDetails;
 import aadhaartokens.model.OTP;
+import aadhaartokens.model.ReportRequest;
 import aadhaartokens.model.RowDates;
+import aadhaartokens.model.SearchRequest;
+import aadhaartokens.model.TokenDetail;
 import aadhaartokens.model.TokenRequest;
+import aadhaartokens.service.AadhaarTokenStatusService;
+import aadhaartokens.service.AadhaarTokenStatusServiceImpl;
 
+@Component
 public class AadhaarUtility {
 	
 	private Connection connection;
+	
+	
+	AadhaarTokenStatusService aadhaarTokenStatusService=new AadhaarTokenStatusServiceImpl();
 	
 	public AadhaarUtility()
 	{
@@ -493,6 +507,786 @@ public class AadhaarUtility {
 		
 		return issuedTokenDetails;
 	}
+	
+	public List<TokenDetail> getReportResult(ReportRequest reportResult)
+	{
+		
+		System.out.println(reportResult);
+		
+		List<TokenDetail> tokenDetails=new ArrayList<>();
+		
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		
+		try{
+			
+			String sql="select * from tokendetails ";
+			if(!reportResult.getRegionspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getRegionspecific().equalsIgnoreCase("State"))
+			{
+				sql=sql+"state='"+reportResult.getState()+"' ";
+			}
+			else if(reportResult.getRegionspecific().equalsIgnoreCase("District"))
+			{
+				sql=sql+"state='"+reportResult.getState()+"' ";
+				sql=sql+" and ";
+				sql=sql+"region='"+reportResult.getDistrict()+"' ";
+				
+			}
+			else if(reportResult.getRegionspecific().equalsIgnoreCase("Pec"))
+			{
+				sql=sql+"state='"+reportResult.getState()+"' ";
+				sql=sql+" and ";
+				sql=sql+"region='"+reportResult.getDistrict()+"' ";
+				sql=sql+" and ";
+				sql=sql+"branch='"+reportResult.getPec()+"' ";
+				
+			}
+			if(!reportResult.getEnrolmentspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getEnrolmentspecific().equalsIgnoreCase("EnrolmentType"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"enrolmenttype='"+reportResult.getEnrolmenttype()+"' ";
+				
+			}
+			if(!reportResult.getStatusspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getStatusspecific().equalsIgnoreCase("Status"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"flag='"+reportResult.getStatus()+"' ";
+				
+			}
+			if(!reportResult.getDatespecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Specific Date"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate='"+format.format(reportResult.getFdate())+"' ";
+				
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Date Range"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate>='"+format.format(reportResult.getFdate())+"' and tokengenerationdate<='"+format.format(reportResult.getTdate());
+				
+			}
+			
+			System.out.println("sql:"+sql);
+			
+			TokenDetail tokendetail=new TokenDetail();
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				tokendetail=new TokenDetail();
+				tokendetail.setTokenid(rs.getInt("TokenID"));
+				PreparedStatement ps1=connection.prepareStatement("select PECState,PECDistrict,PECCity from pecmaster where stateid='"+rs.getString("State")+"' and districtid='"+rs.getString("Region")+"' and peccode='"+rs.getString("Branch")+"'");
+				ResultSet rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setState(rs1.getString(1));
+					tokendetail.setRegion(rs1.getString(2));
+					tokendetail.setBranch(rs1.getString(3));
+					
+				}
+				
+			    tokendetail.setEnrolmenttype(rs.getString("EnrolmentType"));
+				tokendetail.setName(rs.getString("Name"));
+				tokendetail.setContactno(rs.getString("ContactNo"));
+				tokendetail.setEmailid(rs.getString("EmailID"));
+				tokendetail.setAadhaarno(rs.getString("AadhaarNo"));
+				tokendetail.setTokenno(rs.getString("TokenNO"));
+				tokendetail.setTokentime(rs.getString("TokenTime"));
+				tokendetail.setTokengenerationdate(rs.getString("TokenGenerationDate"));
+				tokendetail.setCreationdate(rs.getString("CreationDate"));
+				ps1=connection.prepareStatement("select type from aadhaartokenstatusmaster where id='"+rs.getString("Flag")+"'");
+				rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setFlag(rs1.getString(1));
+					
+				}
+				tokendetail.setFulltokenno(rs.getString("FullTokenNo"));
+				tokendetail.setOtp(rs.getInt("Otp"));
+				tokendetail.setOtptime(rs.getString("OtpTime"));
+				System.out.println(tokendetail.toString());
+				
+				tokenDetails.add(tokendetail);
+				
+			}
+			
+			System.out.println("Size:"+tokenDetails.size());
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			
+		}
+		
+		return tokenDetails;
+		
+	}
+	
+	
+	public List<TokenDetail> getStateReportResult(ReportRequest reportResult, String peccode)
+	{
+		
+		System.out.println(reportResult);
+		
+		List<TokenDetail> tokenDetails=new ArrayList<>();
+		
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		try{
+			
+			String sql="select * from tokendetails ";
+			if(!sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getRegionspecific().equalsIgnoreCase("ALL"))
+			{
+				sql=sql+"state='"+peccode+"' ";
+			}
+			else if(reportResult.getRegionspecific().equalsIgnoreCase("District"))
+			{
+				sql=sql+"state='"+peccode+"' ";
+				sql=sql+" and ";
+				sql=sql+"region='"+reportResult.getDistrict()+"' ";
+				
+			}
+			else if(reportResult.getRegionspecific().equalsIgnoreCase("Pec"))
+			{
+				sql=sql+"state='"+peccode+"' ";
+				sql=sql+" and ";
+				sql=sql+"region='"+reportResult.getDistrict()+"' ";
+				sql=sql+" and ";
+				sql=sql+"branch='"+reportResult.getPec()+"' ";
+				
+			}
+			if(!reportResult.getEnrolmentspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getEnrolmentspecific().equalsIgnoreCase("EnrolmentType"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"enrolmenttype='"+reportResult.getEnrolmenttype()+"' ";
+				
+			}
+			if(!reportResult.getStatusspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getStatusspecific().equalsIgnoreCase("Status"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"flag='"+reportResult.getStatus()+"' ";
+				
+			}
+			if(!reportResult.getDatespecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Specific Date"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate='"+format.format(reportResult.getFdate())+"' ";
+				
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Date Range"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate>='"+format.format(reportResult.getFdate())+"' and tokengenerationdate<='"+format.format(reportResult.getTdate());
+				
+			}
+			
+			System.out.println("sql:"+sql);
+			
+			TokenDetail tokendetail=new TokenDetail();
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				tokendetail=new TokenDetail();
+				tokendetail.setTokenid(rs.getInt("TokenID"));
+				PreparedStatement ps1=connection.prepareStatement("select PECState,PECDistrict,PECCity from pecmaster where stateid='"+rs.getString("State")+"' and districtid='"+rs.getString("Region")+"' and peccode='"+rs.getString("Branch")+"'");
+				ResultSet rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setState(rs1.getString(1));
+					tokendetail.setRegion(rs1.getString(2));
+					tokendetail.setBranch(rs1.getString(3));
+					
+				}
+				
+			    tokendetail.setEnrolmenttype(rs.getString("EnrolmentType"));
+				tokendetail.setName(rs.getString("Name"));
+				tokendetail.setContactno(rs.getString("ContactNo"));
+				tokendetail.setEmailid(rs.getString("EmailID"));
+				tokendetail.setAadhaarno(rs.getString("AadhaarNo"));
+				tokendetail.setTokenno(rs.getString("TokenNO"));
+				tokendetail.setTokentime(rs.getString("TokenTime"));
+				tokendetail.setTokengenerationdate(rs.getString("TokenGenerationDate"));
+				tokendetail.setCreationdate(rs.getString("CreationDate"));
+				ps1=connection.prepareStatement("select type from aadhaartokenstatusmaster where id='"+rs.getString("Flag")+"'");
+				rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setFlag(rs1.getString(1));
+					
+				}
+				tokendetail.setFulltokenno(rs.getString("FullTokenNo"));
+				tokendetail.setOtp(rs.getInt("Otp"));
+				tokendetail.setOtptime(rs.getString("OtpTime"));
+				System.out.println(tokendetail.toString());
+				
+				tokenDetails.add(tokendetail);
+				
+			}
+			
+			System.out.println("Size:"+tokenDetails.size());
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			
+		}
+		
+		return tokenDetails;
+		
+	}
+	
+	
+	public List<TokenDetail> getBranchReportResult(ReportRequest reportResult, String peccode)
+	{
+		
+		System.out.println(reportResult);
+		
+		List<TokenDetail> tokenDetails=new ArrayList<>();
+		
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		try{
+			
+			String sql="select * from tokendetails where branch='"+peccode+"' ";
+			
+			if(!reportResult.getEnrolmentspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getEnrolmentspecific().equalsIgnoreCase("EnrolmentType"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"enrolmenttype='"+reportResult.getEnrolmenttype()+"' ";
+				
+			}
+			if(!reportResult.getStatusspecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			
+			if(reportResult.getStatusspecific().equalsIgnoreCase("Status"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"flag='"+reportResult.getStatus()+"' ";
+				
+			}
+			if(!reportResult.getDatespecific().equalsIgnoreCase("ALL") && !sql.contains("where"))
+			{
+				sql=sql+"where ";
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Specific Date"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate='"+format.format(reportResult.getFdate())+"' ";
+				
+			}
+			if(reportResult.getDatespecific().equalsIgnoreCase("Date Range"))
+			{
+				if(sql.contains("state") || sql.contains("region") || sql.contains("branch") || sql.contains("enrolmenttype") || sql.contains("flag"))
+				{
+					sql=sql+" and ";
+				}
+				sql=sql+"tokengenerationdate>='"+format.format(reportResult.getFdate())+"' and tokengenerationdate<='"+format.format(reportResult.getTdate());
+				
+			}
+			
+			System.out.println("sql:"+sql);
+			
+			TokenDetail tokendetail=new TokenDetail();
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				tokendetail=new TokenDetail();
+				tokendetail.setTokenid(rs.getInt("TokenID"));
+				PreparedStatement ps1=connection.prepareStatement("select PECState,PECDistrict,PECCity from pecmaster where stateid='"+rs.getString("State")+"' and districtid='"+rs.getString("Region")+"' and peccode='"+rs.getString("Branch")+"'");
+				ResultSet rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setState(rs1.getString(1));
+					tokendetail.setRegion(rs1.getString(2));
+					tokendetail.setBranch(rs1.getString(3));
+					
+				}
+				
+			    tokendetail.setEnrolmenttype(rs.getString("EnrolmentType"));
+				tokendetail.setName(rs.getString("Name"));
+				tokendetail.setContactno(rs.getString("ContactNo"));
+				tokendetail.setEmailid(rs.getString("EmailID"));
+				tokendetail.setAadhaarno(rs.getString("AadhaarNo"));
+				tokendetail.setTokenno(rs.getString("TokenNO"));
+				tokendetail.setTokentime(rs.getString("TokenTime"));
+				tokendetail.setTokengenerationdate(rs.getString("TokenGenerationDate"));
+				tokendetail.setCreationdate(rs.getString("CreationDate"));
+				ps1=connection.prepareStatement("select type from aadhaartokenstatusmaster where id='"+rs.getString("Flag")+"'");
+				rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setFlag(rs1.getString(1));
+					
+				}
+				tokendetail.setFulltokenno(rs.getString("FullTokenNo"));
+				tokendetail.setOtp(rs.getInt("Otp"));
+				tokendetail.setOtptime(rs.getString("OtpTime"));
+				System.out.println(tokendetail.toString());
+				
+				tokenDetails.add(tokendetail);
+				
+			}
+			
+			System.out.println("Size:"+tokenDetails.size());
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			
+		}
+		
+		return tokenDetails;
+		
+	}
+	
+	
+	public TokenDetail getSearchResult(SearchRequest searchRequest)
+	{
+		
+		System.out.println(searchRequest);
+		
+		TokenDetail tokendetail=null;	
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		try{
+			
+			String sql="";
+			
+			if(searchRequest.getSearchtype().equalsIgnoreCase("Token"))
+			{
+				sql="select * from tokendetails where FullTokenNo='"+searchRequest.getTokenno()+"' and flag='A'";
+			}
+			else if(searchRequest.getSearchtype().equalsIgnoreCase("NameMobile"))
+			{
+				sql="select * from tokendetails where name='"+searchRequest.getName()+"' and contactno='"+searchRequest.getMobile()+"' and flag='A'";
+			}
+			
+			System.out.println("sql:"+sql);
+			
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				tokendetail=new TokenDetail();
+				tokendetail.setTokenid(rs.getInt("TokenID"));
+				PreparedStatement ps1=connection.prepareStatement("select PECState,PECDistrict,PECCity from pecmaster where stateid='"+rs.getString("State")+"' and districtid='"+rs.getString("Region")+"' and peccode='"+rs.getString("Branch")+"'");
+				ResultSet rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setState(rs1.getString(1));
+					tokendetail.setRegion(rs1.getString(2));
+					tokendetail.setBranch(rs1.getString(3));
+					
+				}
+				
+			    tokendetail.setEnrolmenttype(rs.getString("EnrolmentType"));
+				tokendetail.setName(rs.getString("Name"));
+				tokendetail.setContactno(rs.getString("ContactNo"));
+				tokendetail.setEmailid(rs.getString("EmailID"));
+				tokendetail.setAadhaarno(rs.getString("AadhaarNo"));
+				tokendetail.setTokenno(rs.getString("TokenNO"));
+				tokendetail.setTokentime(rs.getString("TokenTime"));
+				tokendetail.setTokengenerationdate(rs.getString("TokenGenerationDate"));
+				tokendetail.setCreationdate(rs.getString("CreationDate"));
+				ps1=connection.prepareStatement("select type from aadhaartokenstatusmaster where id='"+rs.getString("Flag")+"'");
+				rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setFlag(rs1.getString(1));
+					
+				}
+				tokendetail.setFulltokenno(rs.getString("FullTokenNo"));
+				tokendetail.setOtp(rs.getInt("Otp"));
+				tokendetail.setOtptime(rs.getString("OtpTime"));
+				System.out.println(tokendetail.toString());
+				
+				
+			}
+			
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			
+		}
+		
+		return tokendetail;
+		
+	}
+	
+	
+	public List<TokenDetail> getSearchResults(SearchRequest searchRequest)
+	{
+		
+		System.out.println(searchRequest);
+		
+		List<TokenDetail> tokendetails=new ArrayList<TokenDetail>();
+		
+		TokenDetail tokendetail=null;	
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		try{
+			
+			String sql="";
+			
+			if(searchRequest.getSearchtype().equalsIgnoreCase("Token"))
+			{
+				sql="select * from tokendetails where FullTokenNo='"+searchRequest.getTokenno()+"'";
+			}
+			else if(searchRequest.getSearchtype().equalsIgnoreCase("NameMobile"))
+			{
+				sql="select * from tokendetails where name='"+searchRequest.getName()+"' and contactno='"+searchRequest.getMobile()+"'";
+			}
+			
+			System.out.println("sql:"+sql);
+			
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next())
+			{
+				tokendetail=new TokenDetail();
+				tokendetail.setTokenid(rs.getInt("TokenID"));
+				PreparedStatement ps1=connection.prepareStatement("select PECState,PECDistrict,PECCity from pecmaster where stateid='"+rs.getString("State")+"' and districtid='"+rs.getString("Region")+"' and peccode='"+rs.getString("Branch")+"'");
+				ResultSet rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setState(rs1.getString(1));
+					tokendetail.setRegion(rs1.getString(2));
+					tokendetail.setBranch(rs1.getString(3));
+					
+				}
+				
+			    tokendetail.setEnrolmenttype(rs.getString("EnrolmentType"));
+				tokendetail.setName(rs.getString("Name"));
+				tokendetail.setContactno(rs.getString("ContactNo"));
+				tokendetail.setEmailid(rs.getString("EmailID"));
+				tokendetail.setAadhaarno(rs.getString("AadhaarNo"));
+				tokendetail.setTokenno(rs.getString("TokenNO"));
+				tokendetail.setTokentime(rs.getString("TokenTime"));
+				tokendetail.setTokengenerationdate(rs.getString("TokenGenerationDate"));
+				tokendetail.setCreationdate(rs.getString("CreationDate"));
+				ps1=connection.prepareStatement("select type from aadhaartokenstatusmaster where id='"+rs.getString("Flag")+"'");
+				rs1=ps1.executeQuery();
+				while(rs1.next())
+				{
+					tokendetail.setFlag(rs1.getString(1));
+					
+				}
+				tokendetail.setFulltokenno(rs.getString("FullTokenNo"));
+				tokendetail.setOtp(rs.getInt("Otp"));
+				tokendetail.setOtptime(rs.getString("OtpTime"));
+				System.out.println(tokendetail.toString());
+				
+				tokendetails.add(tokendetail);
+			}
+			
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			
+		}
+		
+		return tokendetails;
+		
+	}
+	
+	
+	
+	public String updateResult(SearchRequest searchRequest,String email)
+	{
+		
+		System.out.println(searchRequest);
+		
+		String result="";
+		
+		try{
+			
+			String sql="insert into aadhaartokenupdatedetails values('"+searchRequest.getTokenid()+"','"+searchRequest.getTname()+"','"+searchRequest.getTmobile()+"','"+searchRequest.getTtoken()+"','"+searchRequest.getEnrolmentid()+"','"+email+"');";
+			System.out.println("sql:"+sql);
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ps.execute();
+			
+			sql="update tokendetails set flag='D' where tokenid='"+searchRequest.getTokenid()+"' and fulltokenno='"+searchRequest.getTtoken()+"' and flag='A';";
+			System.out.println("sql:"+sql);
+			
+			ps=connection.prepareStatement(sql);
+			ps.execute();
+			
+			result="Updated";
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			result="Error";
+			
+		}
+		
+		return result;
+		
+	}
+	
+	public boolean appointmentExists(String name,String mobile)
+	{
+		
+		boolean result=false;
+		
+		try{
+			
+			String sql="select * from tokendetails where flag='A' and name='"+name+"' and contactno='"+mobile+"';";
+			
+			PreparedStatement ps=connection.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next())
+			{
+				return true;
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			return false;
+			
+		}
+		
+		return result;
+		
+	}
+	
+	
+	public EnrolmentDetails getEDateToken(EnrolmentDetails enrolmentDetails)
+	{
+		
+		try{
+			
+			
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			
+			System.out.println(enrolmentDetails);
+			
+			System.out.println(enrolmentDetails.getRdate());
+			
+			ResultSet rs=null;
+    		CallableStatement cstmt = connection.prepareCall("{call InsFullEnrolmentFormDetails(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+    		cstmt.setString("State", String.valueOf(enrolmentDetails.getSstate()));
+    		cstmt.setString("region", String.valueOf(enrolmentDetails.getSdistrict()));
+    		cstmt.setString("branch", String.valueOf(enrolmentDetails.getPeccode()));
+    		cstmt.setString("Type", String.valueOf(enrolmentDetails.getEnroltype()));
+    		cstmt.setString("Date", String.valueOf(enrolmentDetails.getRdate()));
+    		cstmt.setInt("Otp", Integer.parseInt(enrolmentDetails.getOtp()));
+    		cstmt.setString("OtpTime", String.valueOf(enrolmentDetails.getOtptime()));
+    		cstmt.setString("FullName", String.valueOf(enrolmentDetails.getName()));
+    		cstmt.setString("Gender", String.valueOf(enrolmentDetails.getGender()));
+    		cstmt.setInt("Age", enrolmentDetails.getAge());
+    		if(enrolmentDetails.getDob()==null)
+    		{
+    		cstmt.setString("DateofBirth", String.valueOf("1900-01-01"));
+    		}
+    		else{
+    		cstmt.setString("DateofBirth", String.valueOf(format.format(enrolmentDetails.getDob())));
+    		}
+    		cstmt.setString("RelationType", String.valueOf(enrolmentDetails.getCo()));
+    		cstmt.setString("RelationName", String.valueOf(enrolmentDetails.getGname()));
+    		cstmt.setString("HouseNoBldgApt", String.valueOf(enrolmentDetails.getHno()));
+    		cstmt.setString("StreetRoadLane", String.valueOf(enrolmentDetails.getStreetno()));
+    		cstmt.setString("Landmark", String.valueOf(enrolmentDetails.getLmark()));
+    		cstmt.setString("Arealocalitysector", String.valueOf(enrolmentDetails.getArea()));
+    		cstmt.setString("VillageTownCity", String.valueOf(enrolmentDetails.getVill()));
+    		cstmt.setString("PostOffice", String.valueOf(enrolmentDetails.getPost()));
+    		cstmt.setString("ResState", String.valueOf(enrolmentDetails.getState()));
+    		cstmt.setString("SubDistrict", String.valueOf(enrolmentDetails.getPost()));
+    		cstmt.setString("District", String.valueOf(enrolmentDetails.getDist()));
+    		cstmt.setInt("PINCODE", Integer.parseInt(enrolmentDetails.getPin()));
+    		cstmt.setString("MobileNo", String.valueOf(enrolmentDetails.getMobile()));
+    		cstmt.setString("EMail", String.valueOf(enrolmentDetails.getEmail()));
+    		cstmt.setString("Guardian", String.valueOf(enrolmentDetails.getDguardian()));
+    		cstmt.setString("BFiveyrGuardName", String.valueOf(enrolmentDetails.getDgname()));
+    		cstmt.setString("GuardianAadhaarNo", String.valueOf(enrolmentDetails.getDgaadhaar()));
+    		if(enrolmentDetails.getAadhaarno().length()==12)
+    		{
+    			cstmt.setString("AadhaarNo", String.valueOf(enrolmentDetails.getAadhaarno()));
+        		cstmt.setString("EID", String.valueOf(""));
+    		}
+    		else if(enrolmentDetails.getAadhaarno().length()>12){
+    			cstmt.setString("AadhaarNo", String.valueOf(""));
+        		cstmt.setString("EID", String.valueOf(enrolmentDetails.getAadhaarno()));
+    		}
+    		else{
+    			cstmt.setString("AadhaarNo", String.valueOf(""));
+        		cstmt.setString("EID", String.valueOf(""));
+    		}
+    		cstmt.setString("POI", String.valueOf(enrolmentDetails.getPoi()));
+    		cstmt.setString("POA", String.valueOf(enrolmentDetails.getPoa()));
+    		cstmt.setString("DOB", String.valueOf(enrolmentDetails.getDobp()));
+    		cstmt.setString("POR", String.valueOf(enrolmentDetails.getPor()));
+    		cstmt.setString("IntroducerBasedAadaarNo", String.valueOf(""));
+    		cstmt.setString("HOFMember", String.valueOf(enrolmentDetails.getHof()));
+    		cstmt.setString("HOFName", String.valueOf(enrolmentDetails.getHofname()));
+    		if(enrolmentDetails.getHofaadhaar().length()==12)
+    		{
+    			cstmt.setString("HOFBasedAadhaarNo", String.valueOf(enrolmentDetails.getHofaadhaar()));
+        		cstmt.setString("HOFBasedEID", String.valueOf(""));
+    		}
+    		else if(enrolmentDetails.getHofaadhaar().length()>12){
+    			cstmt.setString("HOFBasedAadhaarNo", String.valueOf(""));
+        		cstmt.setString("HOFBasedEID", String.valueOf(enrolmentDetails.getHofaadhaar()));
+    		}
+    		else{
+    			cstmt.setString("HOFBasedAadhaarNo", String.valueOf(""));
+        		cstmt.setString("HOFBasedEID", String.valueOf(""));
+    		}
+    		
+    		
+    		
+    		
+    		
+            boolean results = cstmt.execute();
+            int rowsAffected = 0;
+     
+            // Protects against lack of SET NOCOUNT in stored prodedure
+            while (results || rowsAffected != -1) {
+                if (results) {
+                    rs = cstmt.getResultSet();
+                    break;
+                } else {
+                    rowsAffected = cstmt.getUpdateCount();
+                }
+                results = cstmt.getMoreResults();
+            }
+            
+            while (rs.next()) {
+            	
+            	enrolmentDetails.setTokenid(rs.getString("TokenID"));
+            	
+            	if(enrolmentDetails.getEnroltype().equalsIgnoreCase("1"))
+            	{
+            		enrolmentDetails.setEnroltype("New");	
+            		
+            	}
+            	else if(enrolmentDetails.getEnroltype().equalsIgnoreCase("2"))
+            	{
+            		enrolmentDetails.setEnroltype("Demographic");	
+            		
+            	}
+            	else if(enrolmentDetails.getEnroltype().equalsIgnoreCase("3"))
+            	{
+            		enrolmentDetails.setEnroltype("Biometric");	
+            		
+            	}
+            	
+            	enrolmentDetails.setPecname(Capitalize(rs.getString("PecName")));
+            	enrolmentDetails.setStatus(rs.getString("Status"));
+            	enrolmentDetails.setTime(rs.getString("Time"));
+            	
+            	
+            }
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return enrolmentDetails;
+	}
+	
 	
 	public String Capitalize(String pecname)
 	{

@@ -21,4 +21,21 @@ public class DistrictServiceImpl implements DistrictService {
 		
 	}
 
+	@Override
+	public District getDistrict(int districtid) {
+		
+		return districtRepository.findOne(districtid);
+	}
+
+	@Override
+	public List<District> getStateWiseDistricts(int stateid) {
+		
+		return districtRepository.find(stateid);
+	}
+	
+	
+	
+	
+	
+
 }

@@ -27,5 +27,12 @@ public class PecServiceImpl implements PecService {
 		return pecRepository.findOne(pecid);
 	}
 
+	@Override
+	public List<Pec> getStateWisePecs(int stateid) {
+		
+		return pecRepository.find(stateid);
+	}
+
+	
 	
 }

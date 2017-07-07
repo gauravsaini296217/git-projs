@@ -2,6 +2,7 @@ package aadhaartokens.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.ResourceBundleViewResolver;
@@ -12,6 +13,13 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder(){
+		
+		BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+		return bCryptPasswordEncoder;
+	}
+	
 	@Override
 	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 		super.configureContentNegotiation(configurer);

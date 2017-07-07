@@ -52,6 +52,12 @@ public class State implements Comparable<State>{
 	public void setAgencyid(int agencyid) {
 		this.agencyid = agencyid;
 	}
+
+	@Override
+	public String toString() {
+		return "State [stateid=" + stateid + ", statename=" + statename + ", agencyid=" + agencyid + "]";
+	}
+	
 	
 	
 }

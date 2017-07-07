@@ -12,11 +12,39 @@
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
 /*<![CDATA[*/
-
-
+	
 $(function() { displayAadhaarorNot(); });
 
 $(function() { displayChooseDateorNot(); });
+
+$(function() {
+	
+	var loadregion= /*[[${loadregion}]]*/;
+	if(loadregion=='1')
+		{
+	$('#stateSupport').trigger('change'); 
+		}
+	
+	});
+	
+function numeric(event)
+{
+	
+	return (event.charCode >= 48 && event.charCode <= 57) || (event.charCode==8);	
+
+}
+
+function alpha(e) {
+	var k;
+	document.all ? k=e.keyCode : k=e.which;
+	return ((k>64 && k<91) || (k>96 && k<123) || k==8 || k==32);
+}
+
+function mail(e) {
+	var m;
+	document.all ? m=e.keyCode : m=e.which;
+	return ((m>=64 && m<=90) || (m>96 && m<123) || (m>=48 && m<=57) || m==45 || m==46 || m==8 || m==95);
+}
 
 function showDistricts() {
 var states= /*[[${states}]]*/;
@@ -110,7 +138,7 @@ function displayAadhaarorNot() {
 	var enrolType = document.getElementById('enrolTypeSupport');
 	var enrolTypeData = enrolType.options[enrolType.selectedIndex].text;
 	
-	if(enrolTypeData=='NEW')
+	if(enrolTypeData=='New Enrolment')
 	{
 	
 		document.getElementById('aadhaar').style.display = 'none';
@@ -158,18 +186,28 @@ function validateForm() {
 	var rtimeslot=document.getElementById("rtimeslot").value;
 	var pec=document.getElementById("pecSupport");
 	var pecname=pec.options[pec.selectedIndex].text;
+	var entryType=document.getElementById("entryTypeSupport");
+	var entryTypeData=entryType.options[entryType.selectedIndex].value;
 	
+	if(entryTypeData=='1')
+	{
 	if(rdate=='')
 	{
 	alert("Choose Appointment Date");
 	return false;
 	}
+	}
 	
+	var confrm= /*[[${confrm}]]*/;
 	
-	if(confirm("Your Selected Appointment is [ Date-"+rdate+", Timeslot-"+rtimeslot+", Pec-"+pecname+" ].\n"+"Do you want to continue?"))
+	if(confirm("Your Selected Appointment is [ Date-"+rdate+", Timeslot-"+rtimeslot+", Pec-"+pecname+" ].\n"+confrm+"Do you want to continue?"))
 	{
+		if(entryTypeData=='1')
+		{	
 	$("#AppointmentForm").attr('target', '_blank');
 	setTimeout(function(){ window.location.href = 'http://203.176.156.222:8080/aadhaartokens/'; }, 5000); 
+		}
+	
 	return true;
 	
 	}
@@ -206,7 +244,14 @@ else{
 		    <div class="col-md-8 col-md-offset-2">
 		        <div class="login-panel panel panel-primary ppanel">
                     <div class="panel-heading">
+                      <div class="row">
+                        <div class="col-sm-10">
                         <h3 class="panel-title">Schedule Appointment</h3>
+                        </div>
+                        <div class="col-sm-2">
+                        <a th:href="@{/login}" class="btn btn-danger btn-block" role="button">Login</a>
+                        </div>
+                       </div>
                     </div>
                     <div class="panel-body">
                      <form autocomplete="off" action="#" th:action="@{/}"
@@ -271,14 +316,14 @@ else{
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
 					            <input type="text" th:field="*{name}" placeholder="Name"
-								           class="form-control"   th:readonly="${disable}"/> 
+								           class="form-control"   th:readonly="${disable}" style="text-transform: uppercase" onkeypress="return alpha(event)"/> 
 						        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
 								           class="validation-message"></label>
 					            </div>
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-2">
 					            <input type="text" th:field="*{mobile}" placeholder="Mobile No."
-								           class="form-control"   th:readonly="${disable}"/> 
+								           class="form-control"   th:readonly="${disable}" onkeypress="return numeric(event)"/> 
 						        <label th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"
 								           class="validation-message"></label>
 								<input type="hidden" th:field="*{time}" class="form-control"/>   
@@ -299,7 +344,7 @@ else{
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-2">
 					            <input type="text" th:field="*{otp}" placeholder="OTP"
-								           class="form-control" th:readonly="${tokenRequest.status == 'V'} and ${disable}"/> 
+								           class="form-control" th:readonly="${tokenRequest.status == 'V'} and ${disable}" onkeypress="return numeric(event)"/> 
 						        <label th:if="${#fields.hasErrors('otp')}" th:errors="*{otp}"
 								           class="validation-message"></label>
 								</div>
@@ -324,7 +369,7 @@ else{
 					            <div class="col-sm-1"></div>
 					            <div class="col-sm-4">
 					               <input type="text" th:field="*{email}" placeholder="Email"
-								           class="form-control" /> 
+								           class="form-control" style="text-transform: uppercase" onkeypress="return mail(event)"/> 
 						           <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 								           class="validation-message"></label>
 					            </div>
@@ -339,6 +384,13 @@ else{
 							
 							<div th:if="${tokenRequest.status == 'V'}" class="form-group" >
 							    <div class="row">
+							      <div class="col-sm-1"></div> 
+                                   <div class="col-sm-4">
+                                   <input type="text" th:field="*{aadhaar}" placeholder="Aadhaar"
+								           class="form-control" onkeypress="return numeric(event)" /> 
+						          <label th:if="${#fields.hasErrors('aadhaar')}" th:errors="*{aadhaar}"
+								           class="validation-message"></label>
+                                   </div>
 							      <div class="col-sm-1"></div>
 							      <div class="col-sm-4" id="choosedate">
 			                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Choose Date</button>
@@ -388,13 +440,7 @@ else{
                                         </div>
                                      </div>
                                    </div> 
-                                   <div class="col-sm-1"></div> 
-                                   <div class="col-sm-4">
-                                   <input type="text" th:field="*{aadhaar}" placeholder="Aadhaar"
-								           class="form-control" /> 
-						          <label th:if="${#fields.hasErrors('aadhaar')}" th:errors="*{aadhaar}"
-								           class="validation-message"></label>
-                                   </div>
+                                   
                                 </div>
                                 
                                 <input type="hidden" th:field="*{rid}" class="form-control"/>   

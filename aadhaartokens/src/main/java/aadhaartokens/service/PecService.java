@@ -8,5 +8,7 @@ public interface PecService {
 
 	public List<Pec> getAll();
 	
+	public List<Pec> getStateWisePecs(int stateid);
+	
 	public Pec getone(int pecid);
 }

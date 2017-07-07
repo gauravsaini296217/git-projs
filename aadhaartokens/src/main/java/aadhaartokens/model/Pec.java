@@ -39,6 +39,9 @@ public class Pec implements Comparable<Pec>{
 	@Column(name="districtid")
 	private int districtid;
 
+	@Column(name="stateid")
+	private int stateid;
+	
 	@Column(name="peccode", columnDefinition="nvarchar(5)")
 	private String peccode;
 	
@@ -104,6 +107,14 @@ public class Pec implements Comparable<Pec>{
 
 	public void setDistrictid(int districtid) {
 		this.districtid = districtid;
+	}
+	
+	public int getStateid() {
+		return stateid;
+	}
+
+	public void setStateid(int stateid) {
+		this.stateid = stateid;
 	}
 
 	public String getPeccode() {

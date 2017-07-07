@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+ <html xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:th="http://www.thymeleaf.org">
+ 
+ <head>
+ <title>Aadhaar Online Appointment Service [Admin]</title>
+ <link rel="stylesheet" type="text/css" th:href="@{/css/adminhome.css}" />
+ <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}" />
+ <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'/>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+ <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+
+
+$(function() { showSearch(); });
+
+function showSearch() {
+	
+	
+	var searchtype=document.getElementById("searchtype");
+	var searchtypeData=searchtype.options[searchtype.selectedIndex].value;
+	if(searchtypeData=='Token')
+	{
+	
+		document.getElementById('nameLabel').style.display = 'none';
+		document.getElementById('name').style.display = 'none';
+		document.getElementById('mobileLabel').style.display = 'none';
+		document.getElementById('mobile').style.display = 'none';
+		document.getElementById('tokenLabel').style.display = 'block';
+		document.getElementById('tokenno').style.display = 'block';
+		
+	}
+	else if(searchtypeData=='NameMobile'){
+		
+		document.getElementById('nameLabel').style.display = 'block';
+		document.getElementById('name').style.display = 'block';
+		document.getElementById('mobileLabel').style.display = 'block';
+		document.getElementById('mobile').style.display = 'block';
+		document.getElementById('tokenLabel').style.display = 'none';
+		document.getElementById('tokenno').style.display = 'none';
+	}
+    
+}
+
+function showStatus() {
+	
+	
+	var statusspecific=document.getElementById("statusspecific");
+	var statusspecificData=statusspecific.options[statusspecific.selectedIndex].value;
+	if(statusspecificData=='ALL')
+	{
+	
+		document.getElementById('statusLabel').style.display = 'none';
+		document.getElementById('statusSupport').style.display = 'none';
+		
+	}
+	else if(statusspecificData=='Status'){
+		
+		document.getElementById('statusLabel').style.display = 'block';
+		document.getElementById('statusSupport').style.display = 'block';
+	}
+    
+}
+
+function showDate() {
+	
+	
+	var datespecific=document.getElementById("datespecific");
+	var datespecificData=datespecific.options[datespecific.selectedIndex].value;
+	if(datespecificData=='ALL')
+	{
+	
+		document.getElementById('fdateLabel').style.display = 'none';
+		document.getElementById('fdate').style.display = 'none';
+		document.getElementById('tdateLabel').style.display = 'none';
+		document.getElementById('tdate').style.display = 'none';
+		
+	}
+	else if(datespecificData=='Specific Date'){
+		
+		document.getElementById('fdateLabel').innerHTML = 'Date';
+		document.getElementById('fdateLabel').style.display = 'block';
+		document.getElementById('fdate').style.display = 'block';
+		document.getElementById('tdateLabel').style.display = 'none';
+		document.getElementById('tdate').style.display = 'none';
+	}
+    else if(datespecificData=='Date Range'){
+		
+		document.getElementById('fdateLabel').innerHTML = 'From Date';
+		document.getElementById('fdateLabel').style.display = 'block';
+		document.getElementById('fdate').style.display = 'block';
+		document.getElementById('tdateLabel').style.display = 'block';
+		document.getElementById('tdate').style.display = 'block';
+	}
+}
+
+function showDistricts() {
+var states= /*[[${states}]]*/;
+var selectedIndex = $("#stateSupport option:selected").index();
+var state=states[selectedIndex];
+
+
+var districts= /*[[${districts}]]*/;
+$('#districtSupport')
+.find('option')
+.remove()
+.end();
+$('#pecSupport')
+.find('option')
+.remove()
+.end();
+for (i = 0; i < districts.length; i++) {
+var district=districts[i];
+if(district.stateid==state.stateid)
+{
+
+    $('#districtSupport').append($('<option>', { 
+        value: district.districtid,
+        text : district.districtname 
+    }));
+
+}
+
+}
+
+$('#districtSupport').trigger('change');
+		
+}
+
+function showPecs() {
+	
+	var districts= new Array();
+	var districts1= new Array();
+	$("#districtSupport option").each(function()
+			{
+			    districts1.push($(this).val());
+			});
+	var districts2= /*[[${districts}]]*/;
+	for(p=0;p<districts1.length;p++)
+	{
+		var dist1=districts1[p];
+	     for(q=0;q<districts2.length;q++)
+		{
+		  dist2=districts2[q];
+		  if(dist1==dist2.districtid)
+			  {
+			  
+			  districts.push(dist2);
+			  
+			  }
+			
+			
+			
+			
+		}	
+		
+		
+	}
+	var selectedIndex = $("#districtSupport option:selected").index();
+	var district=districts[selectedIndex];
+    var pecs= /*[[${pecs}]]*/;
+	$('#pecSupport')
+	.find('option')
+	.remove()
+	.end();
+	for (i = 0; i < pecs.length; i++) {
+	var pec=pecs[i];
+	if(district.districtid==pec.districtid)
+	{
+	
+	    $('#pecSupport').append($('<option>', { 
+	        value: pec.pecid,
+	        text : pec.pecname 
+	    }));
+
+	}
+	}
+	
+
+		
+	}
+
+
+function displayAadhaarorNot() {
+	
+	var enrolType = document.getElementById('enrolTypeSupport');
+	var enrolTypeData = enrolType.options[enrolType.selectedIndex].text;
+	
+	if(enrolTypeData=='NEW')
+	{
+	
+		document.getElementById('aadhaar').style.display = 'none';
+		
+	}
+	else{
+		
+		document.getElementById('aadhaar').style.display = 'block';
+	}
+	
+}
+
+function displayChooseDateorNot() {
+	
+	var entryType = document.getElementById('entryTypeSupport');
+	var entryTypeData = entryType.options[entryType.selectedIndex].text;
+	
+	if(entryTypeData=='Partial Information')
+	{
+	
+		document.getElementById('choosedate').style.display = 'block';
+		
+	}
+	else{
+		
+		document.getElementById('choosedate').style.display = 'none';
+	}
+	
+}
+
+
+function validateForm() {
+	
+	var searchtype=document.getElementById("searchtype");
+	var searchtypeData=searchtype.options[searchtype.selectedIndex].value;
+	if(searchtypeData=='Token')
+	{
+	
+		if(document.getElementById('tokenno').value == '')
+		{
+		alert("If Search Type is Token Then Tokenno is mandatory.");
+		return false;
+		}
+		
+	}
+	else if(searchtypeData=='NameMobile'){
+		
+		if(document.getElementById('name').value == '' || document.getElementById('mobile').value == '')
+		{
+		alert("If Search Type is 'NameMobile' Then Name & Mobile both are mandatory.");
+		return false;
+		}
+	}
+	
+	var result= /*[[${result}]]*/;
+	
+	if(result)
+		{
+		
+		if(document.getElementById('enrolmentid').value == '')
+		{
+		alert("Enrolment Id is mandatory for updation.");
+		return false;
+		}
+		
+		
+		}
+	
+	if(confirm("Do you want to continue?"))
+	{
+	return true;
+	
+	}
+else{
+	return false;	
+	
+}
+	
+}
+
+
+/*]]>*/
+</script>
+ </head>
+ 
+ <body>
+    <div class="header">
+	     <div class="row">
+         <!-- <div class="col-sm-1" style="background-color: MidnightBlue;"></div> -->
+         <div class="col-sm-3" style="background-color: MidnightBlue;padding-top:4px;padding-bottom:9px;padding-left:20px">
+	     <h2 style="padding-top:4px;padding-bottom:4px;padding-left:20px"><span><img th:src="@{/images/aadhaarlogo.png}"/></span></h2>
+	     </div>
+	     <div class="col-sm-7" style="background-color: MidnightBlue;">
+	     <h2>Aadhaar Online Appointment Service <span class="label label-info badgefont">[Customer Relationship Interface]</span></h2>
+	     </div>
+	     <div class="col-sm-2" style="background-color: MidnightBlue;padding:12px">
+	     <h2 style="padding:4px"><span style="background-color: white;padding-top:1px;padding-bottom:3px;padding-left:2px;padding-right:2px"><img th:src="@{/images/karvygrouplogo.png}"/></span></h2>
+	     </div>
+	     </div>
+	</div>
+ 	<div class="container font">
+ 		<div class="panel-group" style="margin-top:40px">
+ 			<div class="panel panel-primary">
+ 				<div class="panel-heading nav navbar-default">
+ 				  <div class="row" style="color:white">  
+ 				    <div class="col-xs-5">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li><a th:href="@{/branch/home}" class="" style="color:white">Report</a>
+                            </li>
+                            <li  class="active"><a th:href="@{/branch/update}" class="" style="color:white">Update Enrolment/Updation</a>
+                            </li>
+                            <li><a th:href="@{/branch/search}" class="" style="color:white">Search</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+                    </div>
+                    <div class="col-xs-4">
+                       <ul class="nav navbar-nav navbar-right">
+                            <li><span th:utext="${userName}"></span></li>
+                            <li><a th:href="@{/logout}" class="btn btn-danger" style="color:white;padding:2px;margin-left:8px">Logout</a></li>
+                       </ul>     
+                    </div>
+ 				  </div>	   
+ 				</div>
+ 				<div class="panel-body">
+ 				     <div class="col-md-8 col-md-offset-2">
+ 					 <div class="login-panel panel panel-primary ppanel">
+                        <div class="panel-heading">
+                           <h3 class="panel-title">Update Enrolment/Updation</h3>
+                        </div>
+                        <div class="panel-body">
+ 					 <form autocomplete="off" action="#" th:action="@{/branch/update}"
+					           th:object="${searchRequest}" method="post" class="form-horizontal"
+					           role="form" id="ReportForm">
+                            
+                            <div class="form-group">
+					        <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					            SearchType
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					           </div>
+					            </div>    
+					        <div class="row">
+						        <div class="col-sm-1"></div>
+						        <div class="col-sm-4">
+						            <select class="form-control" th:field="*{searchtype}"  id="searchtype" onChange="showSearch()">
+                                       <option th:value="Token" th:text="Token"></option>
+                                       <option th:value="NameMobile" th:text="NameMobile"></option>
+                                   </select>
+						        </div>
+						        <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					           </div>
+						    </div>
+						    
+						    <br/>
+						    
+						    <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4" id="nameLabel">
+					            Name
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4" id="mobileLabel">
+					            Mobile
+					            </div>
+					            </div>
+					            <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <input type="text" th:field="*{name}" id="name" placeholder="Name"
+								           class="form-control"/> 
+						           <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+								           class="validation-message"></label>
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					               <input type="text" th:field="*{mobile}" id="mobile" placeholder="Mobile"
+								           class="form-control"/> 
+						           <label th:if="${#fields.hasErrors('mobile')}" th:errors="*{mobile}"
+								           class="validation-message"></label>
+					            </div>
+					            </div>    
+					        
+					        <div class="row">
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4" id="tokenLabel">
+					            Token No
+					            </div>
+					            <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					           </div>
+					            </div>    
+					        <div class="row">
+						        <div class="col-sm-1"></div>
+						        <div class="col-sm-4">
+						          <input type="text" th:field="*{tokenno}" id="tokenno" placeholder="Token No"
+								           class="form-control"/> 
+						          <label th:if="${#fields.hasErrors('tokenno')}" th:errors="*{tokenno}"
+								           class="validation-message"></label>
+						        </div>
+						        <div class="col-sm-1"></div>
+					            <div class="col-sm-4">
+					           </div>
+						    </div>
+					        
+                            </div>
+                            
+                            <div th:if="${result}" class="form-group">
+                            <div class="row">
+					        <div class="col-sm-2"></div>
+						    <div class="col-sm-8">
+							    <input type="text" th:field="*{enrolmentid}" id="enrolmentid" placeholder="Enrolment Id"
+								           class="form-control"/> 
+						        <label th:if="${#fields.hasErrors('enrolmentid')}" th:errors="*{enrolmentid}" class="validation-message"></label>
+						    </div>
+						    <div class="col-sm-2"></div>
+						    </div>
+						    <br/>
+						    <div class="row">
+					        <div class="col-sm-12">
+							  <div class="row">
+							  <div class="col-sm-1"></div>
+						      <div class="col-sm-3">
+							    Token No
+						      </div>
+						      <div class="col-sm-1"></div>
+						      <div class="col-sm-3">
+							    Name
+						      </div>
+						      <div class="col-sm-1"></div>
+						      <div class="col-sm-2">
+							    Mobile
+						      </div>
+						      <div class="col-sm-1"></div>
+						      </div>
+						      <div class="row">
+							  <div class="col-sm-1"></div>
+						      <div class="col-sm-3">
+							    <input type="text" th:field="*{ttoken}" 
+								           class="form-control"   th:readonly="true"/> 
+						        <input type="hidden" th:field="*{tokenid}" class="form-control"/>      
+						      </div>
+						      <div class="col-sm-1"></div>
+						      <div class="col-sm-3">
+							    <input type="text" th:field="*{tname}" 
+								           class="form-control"   th:readonly="true"/> 
+						      </div>
+						      <div class="col-sm-1"></div>
+						      <div class="col-sm-2">
+							    <input type="text" th:field="*{tmobile}" 
+								           class="form-control"   th:readonly="true"/> 
+						      </div>
+						      <div class="col-sm-1"></div>
+						      </div>
+                            </div>
+						    </div>
+                            
+                            </div>
+                            
+                            
+                            <div class="form-group">
+					            <div class="row">
+					            <div class="col-sm-5"></div>
+						        <div class="col-sm-2">
+							        <button type="submit" class="btn btn-danger btn-block" onclick="return validateForm()" th:text="${result} ? Update : Search"></button>
+						        </div>
+						        <div class="col-sm-5"></div>
+						        </div>
+					        </div>
+					        
+					        <div th:if="${message}" class="form-group">
+					            <div class="row">
+					            <div class="col-xs-1"></div>
+					                <span class="col-xs-9 label label-primary" th:text="${msg}" style="font-size:15px"></span>
+						        <div class="col-xs-2"></div>
+						        </div>
+						        <div class="row"></div>
+					        </div>
+					        
+					 </form>
+ 					 
+ 					    </div>
+ 					 </div>
+ 					 					 
+ 				</div>
+                        
+                        
+ 					 </div>
+ 					 					 
+ 				   </div>
+ 				</div>
+ 				
+ 			</div>
+ 	<div style="clear:both">
+	<p class="footer">Copyright &copy; 2017 [KDMSL] All Rights Reserved</p>
+	</div>
+ </body>
+ </html>

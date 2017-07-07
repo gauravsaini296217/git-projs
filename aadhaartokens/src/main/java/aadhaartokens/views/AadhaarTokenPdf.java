@@ -64,6 +64,7 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
 		Font header = new Font(Font.FontFamily.COURIER, 15,Font.BOLD, BaseColor.BLACK);
 		Font gendate = new Font(Font.FontFamily.COURIER, 8,Font.BOLD);
 		Font content = new Font(Font.FontFamily.COURIER, 7,Font.BOLD, BaseColor.RED);
+		Font content1 = new Font(Font.FontFamily.COURIER, 7,Font.BOLD, BaseColor.BLACK);
 		Font copyright = new Font(Font.FontFamily.COURIER, 8,Font.BOLD, BaseColor.BLUE);
 		
 		document.open();
@@ -88,17 +89,17 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
 		resourceInputStream = resource.getInputStream();
 		bufferedImage = ImageIO.read(resourceInputStream);
         img = Image.getInstance(writer, bufferedImage, 1);
-        img.setAbsolutePosition(250f, 395f);
+        img.setAbsolutePosition(400f, 395f);
         
         document.add(img);
         
-        PdfPTable table = new PdfPTable(new float[] { 3, 5 });
-        table.setTotalWidth(300f);
+        PdfPTable table = new PdfPTable(new float[] { 2, 6 });
+        table.setTotalWidth(450f);
         
         // the cell object
         PdfPCell cell;
         
-        cell = new PdfPCell(new Phrase("Appointment Receipt", header));
+        cell = new PdfPCell(new Phrase("Aadhaar Online Appointment", header));
         cell.setColspan(2);
         cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
         cell.setMinimumHeight(20f);
@@ -118,7 +119,7 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
         
         cell = new PdfPCell(new Phrase("Name:", otherFont));
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase(issuedTokenDetails.getName(), tokenFont));
+        cell = new PdfPCell(new Phrase(issuedTokenDetails.getName().toUpperCase(), tokenFont));
         table.addCell(cell);
         
         /*ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Name:", otherFont ),20, 145,0);
@@ -340,7 +341,7 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
         
         cell = new PdfPCell(new Phrase("Enrolment Type:", otherFont));
         table.addCell(cell);
-        cell = new PdfPCell(new Phrase(issuedTokenDetails.getEnrolmenttype(), tokenFont));
+        cell = new PdfPCell(new Phrase(issuedTokenDetails.getEnrolmenttype().toUpperCase(), tokenFont));
         table.addCell(cell);
         /*ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Enrol Type:", otherFont ),20, 265,0);
         ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase(issuedTokenDetails.getEnrolmenttype(), tokenFont ),120, 265,0);
@@ -350,15 +351,25 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
         table.writeSelectedRows(0, -1, 20f, 370f, canvas);
         /*document.add(table);*/
         
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Important Points:-", gendate ),10, 140,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Appointment under this token is valid only for one enrolment. Please obtain separate appointment for each resident", content1),10, 130,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("enrolment. This token is non-transferable and valid only for the person whose name is mentioned. The appointment is", content1),10, 120,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("valid only till the date / time mentioned on the token. Residents are requested to be present at enrolment centre 15", content1),10, 110,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("minutes before the scheduled time.Residents should carry photocopies of documents supporting proofs for identity,", content1),10, 100,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("address and date of birth and should produce the originals for verification at the time of enrolment.For any clarifi-", content1),10, 90,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("cations / queries on enrolment, please contact 040-66282840 between 9:30 AM and 6:00 PM on week days", content1),10, 80,0);
+        
+        
         if(issuedTokenDetails.getStatus().equalsIgnoreCase("Token Already Generated"))
         {
         	
-        	ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Previous Appointment Cancelled", gendate ),200, 60,0);
+        	ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Previous Appointment Cancelled", gendate ),350, 50,0);
         	
         }
-        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Appointment Generation Date : "+dateFormat.format(new Date()), gendate ),110, 50,0);
-        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Please bring filled Enrolment form along with Org POI , POA & DOB Proofs.", content ),10, 40,0);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Appointment Generation Date : "+dateFormat.format(new Date()), gendate ),260, 40,0);
+        /*ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("Please bring filled Enrolment form along with Org POI , POA & DOB Proofs.", content ),10, 40,0);
         ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT, new Phrase("One Xerox copy of all the Original documents is required.", content ),10, 25,0);
+        */
      //   ColumnText.showTextAligned(canvas,Element.ALIGN_CENTER, new Phrase("KDMSL � 2016-2017", copyright ),175, 10,0);
         
         
@@ -479,6 +490,17 @@ public class AadhaarTokenPdf extends AbstractITextPdfView{
 		            	email.append("<p>Your Previous Appointment has been cancelled.</p>");
 		            	
 		            }
+		            
+		            email.append("<br>");
+		            email.append("Important Points:-");
+		            email.append("<ul>");
+		            email.append("<li>Appointment under this token is valid only for one enrolment. Please obtain separate appointment for each resident enrolment.</li>");
+		            email.append("<li>This token is non-transferable and valid only for the person whose name is mentioned.</li>");
+		            email.append("<li>The appointment is valid only till the date / time mentioned on the token. Residents are requested to be present at enrolment centre 15 minutes before the scheduled time</li>");
+		            email.append("<li>Residents should carry photocopies of documents supporting proofs for identity, address and date of birth and should produce the originals for verification at the time of enrolment</li></ul>");
+		            email.append("<li>For any clarifications / queries on enrolment, please contact 040-66282840 between 9:30 AM and 6:00 PM on week days</li>");
+		            
+		            
 		            email.append("<p>Note:- Please do not reply, It is system generated mail.</p>");
 		        email.append("<br><br><br><br>");
 		        email.append("<p>Regards,</p>");

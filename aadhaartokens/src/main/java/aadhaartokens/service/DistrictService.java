@@ -8,5 +8,9 @@ public interface DistrictService {
 
 	public List<District> getAll();
 	
+	public List<District> getStateWiseDistricts(int stateid);
+	
+	public District getDistrict(int districtid);
+	
 	
 }
